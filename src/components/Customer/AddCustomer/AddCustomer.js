@@ -3,21 +3,27 @@ import { useState, useEffect } from 'react';
 import { Form, Field } from 'react-final-form';
 import { AddCustomerApi } from '../../../ApiService/apiCustomer';
 import { getCity, getDistrist } from '../../../ApiService/provincesApi';
-
+const getIdCity = (a, x) => {
+    if (x) return a.find((item) => (item.name === x ||item.code ===x ));
+    else return { code: 1 };
+};
 const AddCustomer = (props) => {
+    let codeCity;
     const [prodvice, setProvince] = useState([]);
     const [distrist, setDistrist] = useState([]);
     //init
     const [city, setCity] = useState();
     const [initDistrist, setInitDistrist] = useState();
-    let codeCity;
+    //get CODE CITY
+    
+
     if (city) {
-        var res = city.replace(/\D/g, "");
-        codeCity =parseInt(res)
+        var res = getIdCity(prodvice, city);
+        codeCity = parseInt(res.code);
     } else {
         codeCity = 1;
     }
-
+    //nếu người dùng chọn thành phố thì trả về các quận của thành phố, nếu không chọn để mặc định là hà nội
     useEffect(() => {
         const fetchApi = async () => {
             try {
@@ -35,11 +41,17 @@ const AddCustomer = (props) => {
     }, [codeCity]);
     // add item and rendering component parrent with callback
     const onSubmit = async (values) => {
+        // lưu lại code của tỉnh và quận của người dùng vào database
 
-
-        await AddCustomerApi(values);
-        console.log(values)
-        props.onGetdata(values);
+        let idCity = getIdCity(prodvice, values.city);
+        let idDitrisct = getIdCity(distrist, values.distrist);
+        if (!values.city) {
+            values.city = 'Hà Nội';
+        }
+        let newCity = values.city.replace(/[0-9]/g, '');
+        let newValue = { ...values, city: newCity, codeCity: idCity.code, codeDistrict: idDitrisct.code };
+        await AddCustomerApi(newValue);
+        props.onGetdata(newValue);
     };
     const [open, setOpen] = useState(false);
     const handleOpen = () => {
@@ -48,7 +60,7 @@ const AddCustomer = (props) => {
     const handleClose = () => setOpen(false);
     return (
         <>
-            <Button color="blue" appearance="primary" onClick={() => handleOpen()}>
+            <Button color="green" appearance="primary" onClick={() => handleOpen()}>
                 Thêm mới
             </Button>
             <Modal overflow={false} size={'full'} show={open} onHide={handleClose}>
@@ -112,15 +124,15 @@ const AddCustomer = (props) => {
                                                 placeholder="Thành phố"
                                                 initialValue={city}
                                                 onChange={(e) => {
-                                                    console.log(e.target.id)
+                                                    console.log(e.target.value);
                                                     setCity(e.target.value);
                                                 }}
                                             >
                                                 {prodvice &&
                                                     prodvice.map((item) => {
                                                         return (
-                                                            <option name={item.code}  key={item.code}>
-                                                                {item.code}, {item.name}
+                                                            <option name={item.code} key={item.code}>
+                                                                {item.name}
                                                             </option>
                                                         );
                                                     })}
@@ -151,6 +163,7 @@ const AddCustomer = (props) => {
                                                 appearance="primary"
                                                 type="submit"
                                                 disabled={submitting || pristine}
+                                                color="green"
                                             >
                                                 Tạo mới
                                             </Button>
@@ -172,3 +185,4 @@ const AddCustomer = (props) => {
 };
 
 export default AddCustomer;
+export {getIdCity}

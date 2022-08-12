@@ -88,10 +88,10 @@ function Customers() {
                                 <FlexboxGrid.Item className="item--customer" colspan={3}>
                                     SDT
                                 </FlexboxGrid.Item>
-                                <FlexboxGrid.Item className="item--customer" colspan={4}>
+                                <FlexboxGrid.Item className="item--customer" colspan={3}>
                                     NGÀY SINH{' '}
                                 </FlexboxGrid.Item>
-                                <FlexboxGrid.Item className="item--customer" colspan={5}>
+                                <FlexboxGrid.Item className="item--customer" colspan={6}>
                                     ĐỊA CHỈ
                                 </FlexboxGrid.Item>
                                 <FlexboxGrid.Item className="item--customer" colspan={5}>

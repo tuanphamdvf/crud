@@ -110,76 +110,94 @@
   ],
   "CUSTOMER_ITEM": [
     {
-      "full_name": "Kana Mono",
-      "mobile": "0869011095",
-      "distrist": "Nam từ liêm",
-      "city": "Hà nội",
-      "dob": "1993-08-09",
-      "email": "tuanpham.dvf@gmail.com",
+      "full_name": "Thêm mới thành công",
+      "mobile": "0988888888",
+      "distrist": "Huyện Mường Nhé",
+      "city": "Tỉnh Điện Biên",
+      "dob": "2022-08-05",
+      "email": "duytuanpp@gmail.com",
       "id": 1
     },
     {
-      "id": 2,
-      "full_name": "Kana Mono mini",
-      "mobile": "0869011093",
-      "distrist": "Nam từ liêm",
-      "city": "Hà nội",
-      "dob": "1999-08-09",
-      "group": "chuột",
-      "email": "tuanpham.dvf@gmail.com"
+      "full_name": "sửa thành công",
+      "mobile": "099999999",
+      "distrist": "Thành phố Sầm Sơn",
+      "city": "Tỉnh Thanh Hóa",
+      "dob": "1999-06-12",
+      "email": "hana@gmail.com",
+      "id": 2
     },
     {
-      "id": 3,
-      "full_name": "Kana Mono nono",
-      "mobile": "0869011092",
-      "distrist": "Nam từ liêm",
-      "city": "Hà nội",
-      "dob": "1999-08-09",
-      "group": "chuột",
-      "email": "tuanpham.dvf@gmail.com"
+      "full_name": "Xoá thành công :))",
+      "mobile": "099999999",
+      "distrist": "Huyện Bảo Lâm",
+      "city": "Tỉnh Cao Bằng",
+      "dob": "1999-06-12",
+      "email": "hana@gmail.com",
+      "id": 235
     },
     {
-      "id": 4,
-      "full_name": "Kana Mono",
-      "mobile": "0869011091",
-      "distrist": "Nam từ liêm",
-      "city": "Hà nội",
-      "dob": "1995-08-09",
-      "group": "chuột",
-      "email": "tuanpham.dvf@gmail.com"
+      "full_name": "Test sửa ",
+      "mobile": "099999999",
+      "distrist": "Huyện Bảo Lâm",
+      "city": "Thành phố Hà Nội",
+      "dob": "1999-06-12",
+      "email": "hana@gmail.com",
+      "id": 122
     },
     {
-      "id": 5,
-      "full_name": "Kana Mono haki",
-      "mobile": "0869011015",
-      "distrist": "Nam từ liêm",
-      "city": "Hà nội",
-      "dob": "1995-08-09",
-      "group": "chuột",
-      "email": "tuanpham.dvf@gmail.com"
+      "mobile": "099999999",
+      "distrist": "Huyện Bảo Lâm",
+      "city": "Tỉnh Cao Bằng",
+      "dob": "1999-06-12",
+      "email": "hana@gmail.com",
+      "full_name": "sửa địa chỉ thành công",
+      "id": 55
     },
     {
-      "full_name": "Kana Mono",
-      "mobile": "0869013095",
-      "dob": "1994-08-09",
-      "email": "tuanpham.dvf@gmail.com",
-      "id": 6
+      "full_name": "hana ",
+      "mobile": "0999922222",
+      "distrist": "Huyện Na Hang",
+      "city": "Tỉnh Tuyên Quang",
+      "dob": "1999-06-12",
+      "email": "hana@gmail.com",
+      "id": 334
     },
     {
-      "full_name": "Kana Mono misa4",
-      "mobile": "0869411095",
-      "address": "Quận Tây Hồ",
-      "dob": "1999-08-09",
-      "email": "tuanpham.dvf@gmail.com",
-      "id": 8
+      "full_name": "kana mono misa",
+      "mobile": "099999999",
+      "distrist": "Quận Hoàn Kiếm",
+      "city": "Thành phố Hà Nội",
+      "dob": "1999-06-12",
+      "email": "hana@gmail.com",
+      "id": 33
     },
     {
-      "full_name": "Kana Mono mika",
-      "mobile": "0869014094",
-      "address": "Quận Hoàn Kiếm",
-      "dob": "1994-08-09",
-      "email": "tuanpham.dvf@gmail.com",
-      "id": 9
+      "mobile": "099999999",
+      "distrist": "Huyện Bảo Lâm",
+      "city": "Tỉnh Cao Bằng",
+      "dob": "1999-06-12",
+      "email": "hana@gmail.com",
+      "full_name": "kana",
+      "id": 223
+    },
+    {
+      "full_name": "hana taylor",
+      "mobile": "099999999",
+      "distrist": "Huyện Bảo Lâm",
+      "city": "Tỉnh Cao Bằng",
+      "dob": "1999-06-12",
+      "email": "hana@gmail.com",
+      "id": 11
+    },
+    {
+      "full_name": "hana mikami",
+      "mobile": "099999999",
+      "distrist": "Huyện Bảo Lâm",
+      "city": "Tỉnh Cao Bằng",
+      "dob": "1999-06-12",
+      "email": "hana@gmail.com",
+      "id": 222
     }
   ]
 }

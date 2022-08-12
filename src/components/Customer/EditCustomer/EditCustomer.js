@@ -2,26 +2,33 @@ import { Modal, Button, Placeholder } from 'rsuite';
 import { useState,useEffect } from 'react';
 import { Form, Field } from 'react-final-form';
 import { EditCustomerApi } from '../../../ApiService/apiCustomer';
-import { getCity, getDistrist } from '../../../ApiService/provincesApi';
+import { getCity, getDistrist} from '../../../ApiService/provincesApi';
+import { getIdCity } from '../AddCustomer/AddCustomer';
+
+
 
 const EditCustomer = (props) => {
-
+const {item: i, editCustomer: edit} = props
+    const id = i.id
+    let codeCity =  i.codeCity
     const [prodvice, setProvince] = useState([]);
     const [distrist, setDistrist] = useState([]);
     //init
-    const [city, setCity] = useState();
-    const [initDistrist, setInitDistrist] = useState();
-    let codeCity;
+    const [city, setCity] = useState(i.city);
+    const [initDistrist, setInitDistrist] = useState(i.distrist);
     if (city) {
-        var res = city.replace(/\D/g, "");
-        codeCity =parseInt(res)
+        var res = getIdCity(prodvice, city);
+        if(res)
+        codeCity = parseInt(res.code);
     } else {
         codeCity = 1;
     }
 
+// fetch api 
     useEffect(() => {
         const fetchApi = async () => {
             try {
+        
                 const resCityService = await getCity();
                 setProvince(resCityService);
                 if (codeCity) {
@@ -35,13 +42,11 @@ const EditCustomer = (props) => {
         fetchApi();
     }, [codeCity]);
 
-    const id = props.item.id
-    const item = props.item
-    const editCustomer = props.editCustomer
-  
+ 
+  //handle submit
     const onSubmit = async (values) => {
         await EditCustomerApi(values,id);
-        editCustomer(values,id)
+        edit(values,id)
 
     };
     const [open, setOpen] = useState(false);
@@ -54,13 +59,13 @@ const EditCustomer = (props) => {
             <i className="fa-solid fa-pen-to-square editcustomer--buton" onClick={() => handleOpen()}></i>
             <Modal onHide={handleClose} overflow={false} size={'full'} show={open} >
                 <Modal.Header>
-                    <Modal.Title>Cập nhật khách hàng</Modal.Title>
+                    <Modal.Title>Cập nhật khách hàng "{i.full_name} "</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Placeholder.Graph height="300px" classPrefix="popup--addcustomer">
                         <Form
                             onSubmit={onSubmit}
-                            initialValues ={{full_name: item.full_name, mobile : item.mobile , address: initDistrist, city: city, dob: item.dob, email: item.email}}
+                            initialValues ={{full_name: i.full_name, mobile : i.mobile , distrist: initDistrist, city: city, dob: i.dob, email: i.email}}
                             render={({ handleSubmit, form, submitting, pristine, }) => (
                                 <form onSubmit={handleSubmit} className="from--addcustomer">
                                     <div className="grid--addcustomer--wrapper">
@@ -91,7 +96,7 @@ const EditCustomer = (props) => {
                                                 component="select"
                                                 type="text"
                                                 placeholder="Quận/Huyện"
-                                          
+                                                
                                                 onChange={(e) => {
                                                     setInitDistrist(e.target.value);
                                                 }}
@@ -121,7 +126,7 @@ const EditCustomer = (props) => {
                                                     prodvice.map((item) => {
                                                         return (
                                                             <option name={item.code} key={item.code}>
-                                                                {item.code}, {item.name}
+                                                            {item.name}
                                                             </option>
                                                         );
                                                     })}
@@ -152,8 +157,9 @@ const EditCustomer = (props) => {
                                                 appearance="primary"
                                                 type="submit"
                                                 disabled={submitting || pristine}
+                                                color="blue"
                                             >
-                                                Tạo mới
+                                              Cập nhật
                                             </Button>
                                         </div>
                                     </div>
