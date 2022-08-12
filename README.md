@@ -13,7 +13,7 @@ Open [http://localhost:3000/CUSTOMER_ITEM] to access the database
 
 #Run Front-End: npm start
 Open http://localhost:3001 to display it in your browser,
-Note: `If port 3001 gets busy, you may modify it using the config vscode file.`
+Note: If port 3001 gets busy, you may modify it using the config vscode file.
 
 # Thank you for your time
 
