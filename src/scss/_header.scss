@@ -1,0 +1,101 @@
+.header {
+    display: flex;
+    align-items: center;
+    padding: 0px 20px;
+    width: 100%;
+    max-width: 1600px;
+    height: 69px;
+    align-self: stretch;
+    box-sizing: border-box;
+    background: $white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-bottom: $separator-default;
+    z-index: 111;
+}
+
+
+.header--title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    gap: 32px;
+    width: 469px;
+    height: 36px;
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 36px;
+}
+
+.header--action {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0px 0px 0px 16px;
+    gap: 12px;
+    width: 1091px;
+    height: 32px;
+}
+
+.header--icon {
+    @include flexCenter;
+    padding: 4px;
+    width: 32px;
+    height: 32px;
+    background: $white;
+    border-radius: 16px;
+}
+
+.header--icon--content {
+    @include flexCenter;
+    padding: 4px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+
+    background: $white;
+    border-radius: 16px;
+}
+
+.header--img {
+    @include flexCenter;
+    flex-direction: column;
+    padding: 0px;
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+}
+.header--img--content {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+.header--title--side {
+    display: none;
+}
+.bell--header{
+ width: 32px;
+}
+//responsive the web
+@media only screen and (max-width: 1024px) {
+    .header--title--side {
+        display: none;
+    }
+}
+@media only screen and (max-width: 786px) {
+    .header--title--side {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 576px) {
+    .header--title--side {
+        display: block;
+    }
+    .header--title {
+        display: none;
+    }
+}

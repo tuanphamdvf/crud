@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import elementRouter from './router/router';
+import { DefaultLayout } from './layouts';
+import './scss/app.scss';
+import 'rsuite/lib/styles/index.less'
+import './custom-theme.less'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+  
+            <Routes>
+                {elementRouter.map((item, index) => {
+                    const Page = item.component;
+                    return (
+                        <Route
+                            key={index}
+                            path={item.path}
+                            element={
+                                <DefaultLayout>
+                                    
+                                    <Page />
+                                </DefaultLayout>
+                            }
+                        />
+                    );
+                })}
+
+            </Routes>
+ 
+    );
 }
 
 export default App;

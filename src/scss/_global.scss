@@ -1,0 +1,132 @@
+/*graycool  */
+$gray900: #111827;
+$gray800: #1f2937;
+$gray700: #374151;
+$gray600: #4b5563;
+$gray500: #6b7280;
+$gray400: #9ca3af;
+$gray300: #d1d5db;
+$gray200: #e5e7eb;
+$gray100: #f3f4f6;
+$gray050: #f9fafb;
+/* red */
+$red900: #771d1d;
+$red800: #9b1c1c;
+$red700: #c81e1e;
+$red600: #e02424;
+$red500: #f05252;
+$red400: #f98080;
+$red300: #f8b4b4;
+$red200: #fbd5d5;
+$red100: #fde8e8;
+$red50: #fdf2f2;
+/* green */
+$green900: #014737;
+$green800: #03543f;
+$green700: #046c4e;
+$green600: #057a55;
+$green500: #0e9f6e;
+$green400: #31c48d;
+$green300: #84e1bc;
+$green200: #bcf0da;
+$green100: #def7ec;
+$green50: #f3faf7;
+/* blue */
+$blue900: #233876;
+$blue800: #1e429f;
+$blue700: #1a56db;
+$blue600: #1c64f2;
+$blue500: #3f83f8;
+$blue400: #76a9fa;
+$blue300: #a4cafe;
+$blue200: #c3ddfd;
+$blue100: #e1effe;
+$blue50: #ebf5ff;
+
+$white: #ffffff;
+$boxshadowcolor: 0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1);
+$fontfamily: 'Inter';
+$separator-default: solid 1px $gray200;
+$default-width-sidebar: 250px;
+$default-width-sidebar-tablet: 48px;
+$default-width-wrapper-table: calc(100vw - 280px);
+$default-width-wrapper-table-tablet: calc(100vw - 78px);
+$default-width-wrapper-table-mobile: calc(100vw - 32px);
+$default-padding-moblie: 16px;
+$default-margin-bottom-moblie: 16px;
+
+@mixin fontL {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 30px;
+}
+@mixin fontS {
+    font-size: 12px;
+    font-weight: 400;
+}
+@mixin flexCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@mixin flexBetween {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+@mixin flexCenterColum {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: $fontfamily;
+}
+.green--status {
+    color: $green800;
+    background-color: $green100;
+}
+.red--status {
+    color: $red800;
+    background-color: $red100;
+}
+.blue--status {
+    color: $blue800;
+    background-color: $blue100;
+}
+.gray--status {
+    color: $gray800;
+    background-color: $gray100;
+}
+a {
+    text-decoration: none;
+    &:hover{
+        text-decoration: none;
+    }
+}
+.active {
+    color: $blue600 !important;
+}
+.frontBold{
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 21px;
+    color: $gray900;
+}
+.frontS{
+    font-weight: 400;
+    line-height: 21px;
+    color: $gray500;
+    font-size: 14px;
+}
+
+//responsive the web
+@media only screen and (max-width: 576px) {
+    .main {
+        min-width: 360px;
+    }
+}
