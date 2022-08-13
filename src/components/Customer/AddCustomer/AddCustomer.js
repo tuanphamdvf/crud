@@ -1,29 +1,30 @@
 import { Modal, Button, Placeholder } from 'rsuite';
 import { useState, useEffect } from 'react';
 import { Form, Field } from 'react-final-form';
+
 import { AddCustomerApi } from '../../../ApiService/apiCustomer';
 import { getCity, getDistrist } from '../../../ApiService/provincesApi';
-const getIdCity = (a, x) => {
-    if (x) return a.find((item) => (item.name === x ||item.code ===x ));
-    else return { code: 1 };
-};
+
 const AddCustomer = (props) => {
-    let codeCity;
+  
     const [prodvice, setProvince] = useState([]);
     const [distrist, setDistrist] = useState([]);
-    //init
+    const [open, setOpen] = useState(false);
     const [city, setCity] = useState();
     const [initDistrist, setInitDistrist] = useState();
-    //get CODE CITY
-    
 
+    const handleOpen = () =>  setOpen(true);
+    const handleClose = () => setOpen(false);
+    
+    //get CODE CITY
+    let codeCity;
     if (city) {
         var res = getIdCity(prodvice, city);
         codeCity = parseInt(res.code);
     } else {
         codeCity = 1;
     }
-    //nếu người dùng chọn thành phố thì trả về các quận của thành phố, nếu không chọn để mặc định là hà nội
+
     useEffect(() => {
         const fetchApi = async () => {
             try {
@@ -39,59 +40,92 @@ const AddCustomer = (props) => {
         };
         fetchApi();
     }, [codeCity]);
+
     // add item and rendering component parrent with callback
     const onSubmit = async (values) => {
-        // lưu lại code của tỉnh và quận của người dùng vào database
-
-        let idCity = getIdCity(prodvice, values.city);
-        let idDitrisct = getIdCity(distrist, values.distrist);
         if (!values.city) {
-            values.city = 'Hà Nội';
+            values.city = prodvice[0].name;
         }
-        let newCity = values.city.replace(/[0-9]/g, '');
-        let newValue = { ...values, city: newCity, codeCity: idCity.code, codeDistrict: idDitrisct.code };
+        if (!values.distrist) {
+            values.distrist = distrist[0].name;
+        }
+        let newValue = { ...values, city: values.city, distrist: values.distrist,idproduct:'Iphone X' };
         await AddCustomerApi(newValue);
-        props.onGetdata(newValue);
+        await props.onGetdata(newValue);
+        setOpen(false)
     };
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => {
-        setOpen(true);
-    };
-    const handleClose = () => setOpen(false);
+
     return (
         <>
             <Button color="green" appearance="primary" onClick={() => handleOpen()}>
                 Thêm mới
             </Button>
-            <Modal overflow={false} size={'full'} show={open} onHide={handleClose}>
+            <Modal overflow={false} size="lg" show={open} onHide={handleClose}>
                 <Modal.Header>
                     <Modal.Title>Thêm mới khách hàng</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Placeholder.Graph height="300px" classPrefix="popup--addcustomer">
                         <Form
+                            validate={(values) => {
+                                //validate email + mobile using regex
+                                let regex = /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
+                                let re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                                const errors = {};
+                                if (!values.full_name) {
+                                    errors.full_name = 'Vui lòng nhập tên khách hàng !';
+                                }
+                                if (!values.mobile) {
+                                    errors.mobile = 'Vui lòng nhập SDT !';
+                                } else if (!regex.test(values.mobile)) {
+                                    errors.mobile = 'Bạn đã nhập sai định dạng SDT, Vui lòng kiểm tra lại ! ';
+                                }
+
+                                if (values.email && !re.test(values.email)) {
+                                    errors.email = 'Bạn đã nhập sai định dạng Email, Vui lòng kiểm tra lại ! ';
+                                }
+                                return errors;
+                            }}
                             onSubmit={onSubmit}
                             render={({ handleSubmit, form, submitting, pristine, values }) => (
                                 <form onSubmit={handleSubmit} className="from--addcustomer">
                                     <div className="grid--addcustomer--wrapper">
                                         <div className="grid--addcustomer--item">
-                                            <Field
-                                                className="addcustomer--input--name"
-                                                name="full_name"
-                                                component="input"
-                                                type="text"
-                                                placeholder="Họ và Tên"
-                                            />
+                                            <Field name="full_name">
+                                                {({ input, meta }) => (
+                                                    <div className="wrapper--filed">
+                                                        <input
+                                                            className="addcustomer--input--name"
+                                                            {...input}
+                                                            type="text"
+                                                            placeholder="Họ và tên *"
+                                                        />
+                                                        {meta.error && meta.touched && (
+                                                            <span className="warning">{meta.error}</span>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </Field>
                                         </div>
+
                                         <div className="grid--addcustomer--item">
-                                            <Field
-                                                className="addcustomer--input--name"
-                                                name="mobile"
-                                                component="input"
-                                                type="text"
-                                                placeholder="099xxxxxxxx"
-                                            />
-                                            <span className="addcustomer--name--after">SDT</span>
+                                            <Field name="mobile">
+                                                {({ input, meta }) => (
+                                                    <div className="wrapper--filed">
+                                                        <input
+                                                            className="addcustomer--input--name"
+                                                            {...input}
+                                                            type="text"
+                                                            placeholder="0xxx.xxx.xxx"
+                                                        />
+                                                        {meta.error && meta.touched && (
+                                                            <span className="warning">{meta.error}</span>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </Field>
+                                            <span className="addcustomer--name--after">SDT *</span>
                                         </div>
                                         <div className="grid--addcustomer--item">
                                             <Field
@@ -148,18 +182,25 @@ const AddCustomer = (props) => {
                                             <span className="addcustomer--name--after">Ngày sinh</span>
                                         </div>
                                         <div className="grid--addcustomer--item">
-                                            <Field
-                                                className="addcustomer--input--name"
-                                                name="email"
-                                                component="input"
-                                                type="text"
-                                                placeholder="email@gmail.com"
-                                            />
+                                            <Field name="email">
+                                                {({ input, meta }) => (
+                                                    <div className="wrapper--filed">
+                                                        <input
+                                                            className="addcustomer--input--name"
+                                                            {...input}
+                                                            type="text"
+                                                            placeholder="email@example.vn"
+                                                        />
+                                                        {meta.error && meta.touched && (
+                                                            <span className="warning">{meta.error}</span>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </Field>
                                             <span className="addcustomer--name--after">Email</span>
                                         </div>
                                         <div className="buttons addcustomer--button--submit">
                                             <Button
-                                                onClick={handleClose}
                                                 appearance="primary"
                                                 type="submit"
                                                 disabled={submitting || pristine}
@@ -184,5 +225,9 @@ const AddCustomer = (props) => {
     );
 };
 
+const getIdCity = (a, x) => {
+    if (x) return a.find((item) => item.name === x || item.code === x);
+    else return { code: 1 };
+};
+export { getIdCity };
 export default AddCustomer;
-export {getIdCity}

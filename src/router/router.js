@@ -1,7 +1,7 @@
 import Dashbroad from "../pages/Dashbroad/Dashbroad";
 import Products from "../pages/Products/Products";
-import Customers from "../pages/Customers/Customers";
 import Orders from "../pages/Orders/Orders";
+import Customers from "../pages/Customers/Customers";
 const elementRouter =[
     { path: '/', component: Dashbroad },
     { path: '/product', component: Products },

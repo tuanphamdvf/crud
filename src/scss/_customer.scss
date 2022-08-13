@@ -36,6 +36,10 @@
     @include flexBetween;
 }
 
+.table--customer--filter {
+    margin-left: 16px;
+}
+
 .customer--search--wrapper {
     height: 40px;
     width: 367px;
@@ -113,7 +117,7 @@
 }
 
 .customer--item {
-    height: 50px;
+    height: 54px;
     width: 100%;
     display: flex;
     justify-content: flex-start;
@@ -135,7 +139,7 @@
 }
 
 .customer--item--time {
-    width: 16,66%;
+    width: 16, 66%;
     font-size: 14px;
     font-weight: 400;
     line-height: 18px;
@@ -143,7 +147,7 @@
     text-align: start;
     padding: 16px;
     height: 54px;
-    
+
 }
 
 .wrapper--action--left {
@@ -210,15 +214,16 @@
 
 //paging
 .wrapper--paging {
+    padding-top: 16px;
     width: 100%;
-    height: 54px;
+    height: 50px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
     gap: 16px;
     position: absolute;
     right: 16px;
-    bottom: 16px;
+    bottom: 0;
 }
 
 .paging--text {
@@ -273,12 +278,8 @@
     width: 100%;
     margin-left: 16px;
     cursor: pointer;
-    transition: background 0.4s linear;
 
-    &:hover {
-        cursor: pointer;
-        transform: scale(1.5);
-    }
+
 }
 
 .wrapper--footer--edit {
@@ -294,16 +295,15 @@
 }
 
 // Grid
-
 .customer--header--wrapper {
-    background-color:$gray050;
+    background-color: $gray050;
     height: 50px;
     border-radius: 8px;
     padding: 16px;
 }
 
 .grid--item--customer {
-    height: 54px;
+    height: 49px;
     padding: 16px;
 }
 
@@ -316,53 +316,60 @@
 }
 
 .action--customer {
-width: 70px;
-display: flex;
-justify-content: space-between;
-padding-left: 16px;
+    width: 70px;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 16px;
 }
-.popup--addcustomer{
+
+.popup--addcustomer {
 
     height: 100%;
     padding: 16px;
 }
-.addcustomer--button--submit{
- position: absolute;
- right: 0px;
- bottom: -36px;
+
+.addcustomer--button--submit {
+    position: absolute;
+    right: 0px;
+    bottom: -36px;
 }
-.addcustomer--button--back{
+
+.addcustomer--button--back {
     position: absolute;
     bottom: 0;
     right: 90px;
 }
-.grid--addcustomer--wrapper{
+
+.grid--addcustomer--wrapper {
     width: 100%;
     height: 100%;
     display: grid;
     grid-template-columns: 48% 48%;
     grid-template-rows: auto;
     grid-gap: 42px;
-   
+
 
 }
-.grid--addcustomer--item{
-display: flex;
-flex-direction: column;
-justify-content: center;
-position: relative;
-border-radius: 8px;
-border: solid 1px $gray200;
-align-items: flex-start;
-padding-left: 16px;
-position: relative;
+
+.grid--addcustomer--item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    border-radius: 8px;
+    border: solid 1px $gray200;
+    align-items: flex-start;
+    padding-left: 16px;
+    position: relative;
 }
-.from--addcustomer{
+
+.from--addcustomer {
 
     width: 100%;
     height: 100%;
 }
-.addcustomer--name--after{
+
+.addcustomer--name--after {
     background-color: $white;
     height: 12px;
     width: 58px;
@@ -376,24 +383,103 @@ position: relative;
     color: $gray500;
     text-align: center;
 }
-.addcustomer--input--name{
+
+.addcustomer--input--name {
     border: none;
     height: 32px;
     padding-left: 8px;
     width: 96%;
     outline: none;
     cursor: pointer;
-  
+
 }
-.editcustomer--buton{
-    color:$blue500;
+
+.editcustomer--buton {
+    color: $blue500;
     cursor: pointer;
     width: 24px;
     padding: 6px;
 }
-.deletecustomer--buton{
-    color:$red500;
+
+.deletecustomer--buton {
+    color: $red500;
     cursor: pointer;
     width: 24px;
     padding: 6px;
+}
+
+.popup--filtercustomer {
+    padding-top: 16px;
+    padding-left: 16px;
+
+}
+
+.grid--filtercustomer--wrapper {
+    height: 160px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 48% 48%;
+    grid-template-rows: auto;
+    grid-gap: 16px;
+}
+
+.button--onhide {
+    position: absolute;
+    left: 8px;
+    bottom: 8px;
+    background-color: $red500;
+    width: 70px;
+    height: 30px;
+    border-radius: 8px;
+    color: #fff;
+
+}
+
+.fa--customer--wrapper {
+    background-color: $white;
+    width: 100%;
+}
+
+.bodyfilter--draw {
+    width: 100%;
+    margin: 0px !important;
+
+}
+
+.bodyfilter--draw {
+    overflow: hidden !important;
+    height: 95%;
+}
+
+.filter--button--submit {
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    padding: 16px;
+}
+
+.button--filter--Customer {
+    width: 89px;
+    margin-right: 8px;
+    height: 39px;
+}
+
+.wrapper--filed{
+    width: 100%;
+}
+.affter--filter--productsales{
+    background-color: $white;
+    height: 12px;
+    width: 112px;
+    border-radius: 2px;
+    position: absolute;
+    top: -6px;
+    left: 16px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 12px;
+    color: $gray500;
 }

@@ -19,7 +19,7 @@ function Sidebar() {
 
                     <span className="sidebar--item--text">Khách hàng</span>
                 </a>
-                <a href="/addProduct" className="sidebar--item--wrapper" id="title__oder">
+                <a href="/order" className="sidebar--item--wrapper" id="title__oder">
                     <i className="fa-solid fa-file-lines sidebar--item--icon "></i>
                     <span className="sidebar--item--text">Đơn hàng</span>
                 </a>
