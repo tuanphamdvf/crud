@@ -33,7 +33,6 @@ export function handleDeleteCustomer(id, callback) {
         .then(function (response) {
             return response.json();
         })
-        .then(callback);
 }
 //Edit
 export function EditCustomerApi(data, id, callback) {

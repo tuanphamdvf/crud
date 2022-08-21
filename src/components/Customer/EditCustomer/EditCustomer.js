@@ -24,9 +24,15 @@ const EditCustomer = (props) => {
         if (values.mobile) {
             values.mobile = values.mobile.replace(/\s/g, '');
         }
-        await EditCustomerApi({ ...values, mobile: values.mobile }, i.id,editStatus('success'),);
-        await edit({ ...values, mobile: values.mobile }, i.id);
-        setOpen(false);
+        if(i.id){
+            await EditCustomerApi({ ...values, mobile: values.mobile }, i.id,editStatus('success'),);
+            await edit({ ...values, mobile: values.mobile }, i.id);
+            setOpen(false);
+        }else{
+            editStatus("warning")
+            window.location.reload()
+        }
+        
     };
 
     function handleCity(city) {
@@ -43,8 +49,8 @@ const EditCustomer = (props) => {
             });
         } else {
             Notification[funcName]({
-                title: 'Sửa khách hàng thất bại!',
-                duration: 2000
+                title: 'Vui lòng thử lại !!',
+                duration: 4000
             });
         }
     }

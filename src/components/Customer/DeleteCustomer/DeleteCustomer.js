@@ -5,15 +5,28 @@ import { handleDeleteCustomer } from '../../../ApiService/apiCustomer';
 import PropTypes from 'prop-types'
 const DeleteCustomer = (props) => {
     const item = props.item
+
     function openNotifi(funcName) {
+        if (funcName === 'success') {
             Notification[funcName]({
-                title: 'Xoá thành công  !',
+                title: 'Xoá khách hàng thành công !',
                 duration: 2000
             });
+        } else {
+            Notification[funcName]({
+                title: 'Có lỗi. Vui lòng refesh trang và  thử lại !',
+                duration: 5000
+            });
+        }
     }
     const onSubmit = async () => {
-           await handleDeleteCustomer(item.id,openNotifi('success'))
-          props.deleteCustomer(item.id)
+        if(item.id){
+            await handleDeleteCustomer(item.id,openNotifi('success'))
+           await props.deleteCustomer(item.id)
+        }else{
+            openNotifi("warning")
+        }
+          
     };
     const [open, setOpen] = useState(false);
     const handleOpen = () => {
@@ -33,7 +46,7 @@ const DeleteCustomer = (props) => {
                             onSubmit={onSubmit}
                             render={({ handleSubmit }) => (
                                 <form onSubmit={handleSubmit} className="from--addcustomer">
-                                     Cảnh báo, bạn có chắc chắn muốn xoá khách hàng "{item.full_name}"
+                                     Cảnh báo, bạn có chắc chắn muốn xoá khách hàng "{item.full_name} - {item.id}"
                                     <div className="grid--addcustomer--wrapper">
                                         <div className="buttons addcustomer--button--submit">
                                             <Button

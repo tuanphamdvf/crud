@@ -33,29 +33,7 @@ function Customers() {
         setCustomer(newArr);
     }
     //----filter----
-    function filterCustomer(data) {
-        if (data.full_name || data.product || data.email || data.mobile) {
-            let name = handleString(data.full_name);
-            let mobile = handleString(data.mobile);
-            let product = handleString(data.product);
-            //loc tren array current
-            const newArr = dataCus.current.filter((item) => {
-                let nameItem = handleString(item.full_name);
-                let productItem = handleString(item.idproduct);
-                let mobileItem = handleString(item.mobile);
-                return (
-                    (!name || nameItem === name) &&
-                    (!mobile || mobileItem === mobile) &&
-                    (!product || productItem === data.product) &&
-                    (!data.email || item.email === data.email)
-                );
-            });
-            setCustomer(newArr);
-        } else {
-            setCustomer(dataCus.current);
-        }
-    }
-
+    
     //-----ADD------
     function getdata(data) {
         if (data) return setCustomer([...customer, data]);
@@ -77,23 +55,6 @@ function Customers() {
     }, []);
     //-----Search----
 
-    const handleFilter = (event) => {
-        const searchWord = event.target.value;
-        setWordEntered(searchWord);
-        const newFilter = customer.filter((item) => {
-            return (
-                handleString(item.full_name).toLowerCase().includes(handleString(searchWord).toLowerCase()) ||
-                item.mobile.toLowerCase().includes(searchWord.toLowerCase()) ||
-                item.email.toLowerCase().includes(searchWord.toLowerCase())
-            );
-        });
-
-        if (searchWord === '') {
-            setCustomer(dataCus.current);
-        } else {
-            setCustomer(newFilter);
-        }
-    };
     //
     const clearInput = () => {
         setCustomer([]);
@@ -120,7 +81,7 @@ function Customers() {
                                 <input
                                     className="customer--search--input"
                                     placeholder="Tìm kiếm... "
-                                    onChange={handleFilter}
+                        
                                     value={wordEntered}
                                 />
                                 <div>
@@ -131,7 +92,7 @@ function Customers() {
                             <div className="wrapper--action--left">
                                 <AddCustomer onGetdata={getdata}></AddCustomer>
                                 <div className="table--customer--filter">
-                                    <FilterCustomer filter={filterCustomer}></FilterCustomer>
+                                    <FilterCustomer ></FilterCustomer>
                                 </div>
                             </div>
                         </div>
