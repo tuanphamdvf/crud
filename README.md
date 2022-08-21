@@ -11,6 +11,9 @@ You need to install JSON SEVER on your computer in oder to run the database:
 #Run Mock API : `npm run json`
 - Open [http://localhost:3000/CUSTOMER_ITEM] to access the database
 
+#load node-module 
+`npm i`
+
 #Run Front-End: `npm start`
 - Open http://localhost:3001 to display it in your browser,
 - Note: If port 3001 gets busy, you may modify it using the config vscode file.
