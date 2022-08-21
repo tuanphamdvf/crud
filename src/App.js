@@ -17,7 +17,6 @@ function App() {
                             path={item.path}
                             element={
                                 <DefaultLayout>
-                                    
                                     <Page />
                                 </DefaultLayout>
                             }

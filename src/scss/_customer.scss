@@ -105,7 +105,7 @@
 
 .customer--header--title {
     font-size: 12px;
-    font-weight: 600px;
+    font-weight: 600;
     line-height: 18px;
     width: 16.5%;
     text-align: start;
@@ -223,7 +223,7 @@
     gap: 16px;
     position: absolute;
     right: 16px;
-    bottom: 0;
+    bottom: 32px;
 }
 
 .paging--text {
@@ -386,10 +386,10 @@
 
 .addcustomer--input--name {
     border: none;
-    height: 32px;
+    height: 100%;
     padding-left: 8px;
     width: 96%;
-    outline: none;
+    outline: none !important;
     cursor: pointer;
 
 }
@@ -406,6 +406,8 @@
     cursor: pointer;
     width: 24px;
     padding: 6px;
+    margin-left: 16px;
+    margin-right: 16px;
 }
 
 .popup--filtercustomer {
@@ -469,6 +471,8 @@
 
 .wrapper--filed{
     width: 100%;
+    height: 32px;
+    border: none !important
 }
 .affter--filter--productsales{
     background-color: $white;
@@ -482,4 +486,22 @@
     font-size: 12px;
     line-height: 12px;
     color: $gray500;
+}
+.rs-table-cell-content{
+    display: flex;
+    align-items: center;
+}
+.rs-table-body-row-wrapper{
+    height: 500px!important;
+}
+.rs-table-cell{
+    font-size: 12px;
+    font-weight:600;
+    line-height: 24px;
+    color: $gray900;
+}
+.addOder--button--action{
+    color: $blue600;
+    cursor: pointer;
+    padding: 4px;
 }

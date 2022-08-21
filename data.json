@@ -92,94 +92,145 @@
   ],
   "CUSTOMER_ITEM": [
     {
-      "full_name": "Thêm mới thành công",
-      "idproduct": "Iphone X",
-      "mobile": "0988888888",
-      "distrist": "Huyện Mường Nhé",
-      "city": "Tỉnh Điện Biên",
-      "dob": "2022-08-05",
-      "email": "duytuanpp@gmail.com",
-      "id": 1
-    },
-    {
-      "full_name": "sửa thành công  ",
-      "idproduct": "Iphone X",
-      "mobile": "099999999",
-      "distrist": "Thành phố Sầm Sơn",
-      "city": "Tỉnh Ninh Bình",
+      "full_name": "kana monogami",
+      "mobile": "0999999999",
       "dob": "1999-06-12",
       "email": "hana@gmail.com",
+      "city": "Thành phố Hồ Chí Minh",
+      "distrist": "Quận Gò Vấp",
+      "idproduct": "Iphone X",
       "id": 2
     },
     {
       "full_name": "Xoá thành công :))",
-      "idproduct": "Iphone X",
-      "mobile": "099999999",
-      "distrist": "Huyện Bảo Lâm",
-      "city": "Tỉnh Cao Bằng",
+      "mobile": "0999999998",
       "dob": "1999-06-12",
       "email": "hana@gmail.com",
-      "id": 235
+      "city": "Tỉnh Lai Châu",
+      "distrist": "Huyện Mường Tè",
+      "id": 235,
+      "idproduct": "Iphone X"
     },
     {
-      "full_name": "Test sửa",
-      "mobile": "0999999991",
-      "distrist": "Quận Ba Đình",
-      "city": "Thành phố Hà Nội",
-      "dob": "1999-06-12",
-      "email": "hana@gmail.com",
-      "id": 122,
-      "idproduct": "Iphone 9"
-    },
-    {
-      "mobile": "099999999",
-      "distrist": "Huyện Bảo Lâm",
-      "city": "Tỉnh Cao Bằng",
-      "dob": "1999-06-12",
-      "email": "hana@gmail.com",
       "full_name": "sửa địa chỉ thành công",
-      "idproduct": "Iphone 9",
+      "mobile": "0999999990",
+      "dob": "1999-06-12",
+      "email": "hana@gmail.com",
+      "city": "Thành phố Hải Phòng",
+      "distrist": "Quận Kiến An",
       "id": 55
     },
     {
-      "full_name": "hana ",
+      "full_name": "hana taylor",
+      "mobile": "0999999899",
+      "dob": "1999-06-12",
+      "email": "hana@gmail.com",
+      "city": "Thành phố Hải Phòng",
+      "distrist": "Quận Lê Chân",
       "idproduct": "Iphone 9",
-      "mobile": "0999922222",
-      "distrist": "Huyện Na Hang",
-      "city": "Tỉnh Tuyên Quang",
-      "dob": "1999-06-12",
-      "email": "hana@gmail.com",
-      "id": 334
+      "id": 11234
     },
     {
-      "full_name": "kana mono misa",
-      "idproduct": "Iphone 1",
-      "mobile": "099999999",
-      "distrist": "Quận Hoàn Kiếm",
+      "full_name": "hana ",
+      "mobile": "0999909999",
+      "dob": "1999-06-12",
+      "email": "hana@gmail.com",
+      "city": "Thành phố Hồ Chí Minh",
+      "distrist": "Quận 6",
+      "idproduct": "Iphone 12",
+      "id": 133124
+    },
+    {
+      "mobile": "0999998999",
+      "dob": "1999-06-12",
+      "email": "hana@gmail.com",
+      "city": "Thành phố Hồ Chí Minh",
+      "distrist": "Quận 12",
+      "full_name": "Conan",
+      "id": 1331231
+    },
+    {
+      "mobile": "0999999990",
+      "dob": "1999-06-12",
+      "email": "hana@gmail.com",
+      "city": "Thành phố Hải Phòng",
+      "distrist": "Quận Lê Chân",
+      "full_name": "kana mono ",
+      "id": 1331112
+    },
+    {
+      "full_name": "Kana Yuimi",
+      "mobile": "0999999999",
+      "dob": "1999-06-12",
+      "email": "hana@gmail.com",
+      "city": "Tỉnh Quảng Ninh",
+      "distrist": "Thành phố Móng Cái",
+      "id": 133111
+    },
+    {
+      "full_name": "Sửa khách hàng",
+      "mobile": "0999999990",
+      "dob": "1999-06-12",
+      "email": "hana@gmail.com",
+      "city": "Thành phố Hải Phòng",
+      "distrist": "Quận Hải An",
+      "id": 1331224
+    },
+    {
+      "full_name": "Thêm mới lên đầu 2",
+      "mobile": "0988888888",
+      "dob": "2011-02-17",
+      "email": "duytuanpp@gmail.com",
       "city": "Thành phố Hà Nội",
-      "dob": "1999-06-12",
-      "email": "hana@gmail.com",
-      "id": 33
+      "distrist": "Quận Long Biên",
+      "id": 14411235
     },
     {
-      "full_name": "hana taylor",
-      "idproduct": "Iphone X",
-      "mobile": "099999999",
-      "distrist": "Huyện Bảo Lâm",
-      "city": "Tỉnh Cao Bằng",
-      "dob": "1999-06-12",
-      "email": "hana@gmail.com",
-      "id": 11
+      "full_name": "Thêm mới lên đầu",
+      "mobile": "0988888888",
+      "dob": "2022-06-01",
+      "email": "new@gmail.com",
+      "city": "Thành phố Hà Nội",
+      "distrist": "Quận Đống Đa",
+      "id": 14411236
     },
     {
-      "full_name": "hana taylor",
+      "full_name": "Test sửa KH",
+      "mobile": "0898899985",
+      "dob": "2022-04-28",
+      "email": "email@gmail.com",
+      "city": "Thành phố Hà Nội",
+      "distrist": "Quận Hoàn Kiếm",
+      "id": 14411239
+    },
+    {
+      "full_name": "Test format numbe",
+      "mobile": "0933366699",
+      "dob": "2003-02-01",
+      "email": "duytuanp@gmail.com",
+      "city": "Tỉnh Điện Biên",
+      "distrist": "Huyện Mường Nhé",
+      "id": 14411241
+    },
+    {
+      "distrist": "Huyện Đồng Văn",
+      "city": "Tỉnh Hà Giang",
+      "full_name": "Thêm mới lên đầu ",
+      "mobile": "0988878788",
+      "dob": "2022-08-13",
+      "email": "tuanpham@gmail.com",
       "idproduct": "Iphone X",
-      "mobile": "099999999",
-      "distrist": "Huyện Bảo Lâm",
-      "city": "Tỉnh Cao Bằng",
-      "dob": "1999-06-12",
-      "email": "hana@gmail.com",
-      "id": 12
+      "id": 14411242
+    },
+    {
+      "full_name": "Phạm Duy Tuấn ",
+      "mobile": "0869011095",
+      "city": "Tỉnh Thái Bình",
+      "distrist": "Huyện Vũ Thư",
+      "dob": "1999-05-19",
+      "email": "tuanpham@gmail.com",
+      "idproduct": "Iphone X",
+      "id": 14411243
     }
   ]
 }

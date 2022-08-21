@@ -20,4 +20,8 @@ export function apiOneDist(id){
     return fetch(`https://provinces.open-api.vn/api/d/${id}`)
     .then(data => data.json())
 }
-
+ 
+export function getAllAdress(){
+    return fetch(`https://provinces.open-api.vn/api/?depth=2`)
+    .then(data => data.json())
+}

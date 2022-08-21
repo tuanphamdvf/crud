@@ -1,5 +1,5 @@
-function Orders() {
-    return (<h2>odeer</h2>  );
+function Order() {
+    return ( <h2>order</h2> );
 }
 
-export default Orders;
+export default Order;

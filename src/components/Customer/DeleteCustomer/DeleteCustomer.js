@@ -1,14 +1,19 @@
-import { Modal, Button, Placeholder } from 'rsuite';
+import { Modal, Button, Placeholder,Notification } from 'rsuite';
 import { useState } from 'react';
 import { Form } from 'react-final-form';
 import { handleDeleteCustomer } from '../../../ApiService/apiCustomer';
-
+import PropTypes from 'prop-types'
 const DeleteCustomer = (props) => {
     const item = props.item
-    const idCustomer = item.id
+    function openNotifi(funcName) {
+            Notification[funcName]({
+                title: 'Xoá thành công  !',
+                duration: 2000
+            });
+    }
     const onSubmit = async () => {
-           await handleDeleteCustomer(idCustomer)
-          props.deleteCustomer(idCustomer)
+           await handleDeleteCustomer(item.id,openNotifi('success'))
+          props.deleteCustomer(item.id)
     };
     const [open, setOpen] = useState(false);
     const handleOpen = () => {
@@ -31,7 +36,6 @@ const DeleteCustomer = (props) => {
                                      Cảnh báo, bạn có chắc chắn muốn xoá khách hàng "{item.full_name}"
                                     <div className="grid--addcustomer--wrapper">
                                         <div className="buttons addcustomer--button--submit">
-                                       
                                             <Button
                                                 onClick={handleClose}
                                                 appearance="primary"
@@ -55,5 +59,7 @@ const DeleteCustomer = (props) => {
         </>
     );
 };
-
+DeleteCustomer.protoType = {
+    item: PropTypes.object.isRequired
+}
 export default DeleteCustomer;

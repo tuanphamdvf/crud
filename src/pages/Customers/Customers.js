@@ -1,12 +1,19 @@
-import Customer from '../../components/Customer/CustomerItem/Customer';
-import { FlexboxGrid } from 'rsuite';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
+import { FlexboxGrid, Pagination } from 'rsuite';
 import { getCustomer } from '../../ApiService/apiCustomer';
 import AddCustomer from '../../components/Customer/AddCustomer/AddCustomer';
 import FilterCustomer from '../../components/Customer/FilterCustomer/FilterCustomer';
+import CustomerTable from '../../components/Customer/CustomerTable/CustomerTable';
 import { handleString } from '../../components/Function/Function';
+import { getAllAdress } from '../../ApiService/provincesApi';
+
 function Customers() {
+    const [wordEntered, setWordEntered] = useState('');
+    const [prodvice, setProvince] = useState([]);
+    const [activePage, setActivePage] = useState(1);
+    // array current
+    const dataCus = useRef();
     const [customer, setCustomer] = useState([]);
     //-----delete-----
     function deleteCustomer(id) {
@@ -27,39 +34,81 @@ function Customers() {
     }
     //----filter----
     function filterCustomer(data) {
-        let name = handleString(data.full_name);
-        let product = handleString(data.product);
-        console.log(product);
-        const newArr = customer.filter((item) => {
-            let nameItem = handleString(item.full_name);
-            let productItem = handleString(item.idproduct);
-            console.log(item.idproduct);
-            return (
-                (!name || nameItem === name) &&
-                (!data.mobile || item.mobile === data.mobile) &&
-                (!product || productItem === data.full_name) &&
-                (!data.email || item.email === data.email)
-            );
-        });
-        setCustomer(newArr);
+        if (data.full_name || data.product || data.email || data.mobile) {
+            let name = handleString(data.full_name);
+            let mobile = handleString(data.mobile);
+            let product = handleString(data.product);
+            //loc tren array current
+            const newArr = dataCus.current.filter((item) => {
+                let nameItem = handleString(item.full_name);
+                let productItem = handleString(item.idproduct);
+                let mobileItem = handleString(item.mobile);
+                return (
+                    (!name || nameItem === name) &&
+                    (!mobile || mobileItem === mobile) &&
+                    (!product || productItem === data.product) &&
+                    (!data.email || item.email === data.email)
+                );
+            });
+            setCustomer(newArr);
+        } else {
+            setCustomer(dataCus.current);
+        }
     }
 
-    // Function handle when add item, then render list item
+    //-----ADD------
     function getdata(data) {
         if (data) return setCustomer([...customer, data]);
     }
 
-    //get data
     useEffect(() => {
-        let mounted = true;
-        getCustomer().then((items) => {
-            if (mounted) {
-                setCustomer(items);
+        const fetchApi = async () => {
+            try {
+                const resCityService = await getAllAdress();
+                setProvince(resCityService);
+                const allCustomer = await getCustomer();
+                setCustomer(allCustomer);
+                dataCus.current = allCustomer;
+            } catch (error) {
+                console.log(error);
             }
-        });
-        return () => (mounted = false);
+        };
+        fetchApi();
     }, []);
+    //-----Search----
 
+    const handleFilter = (event) => {
+        const searchWord = event.target.value;
+        setWordEntered(searchWord);
+        const newFilter = customer.filter((item) => {
+            return (
+                handleString(item.full_name).toLowerCase().includes(handleString(searchWord).toLowerCase()) ||
+                item.mobile.toLowerCase().includes(searchWord.toLowerCase()) ||
+                item.email.toLowerCase().includes(searchWord.toLowerCase())
+            );
+        });
+
+        if (searchWord === '') {
+            setCustomer(dataCus.current);
+        } else {
+            setCustomer(newFilter);
+        }
+    };
+    //
+    const clearInput = () => {
+        setCustomer([]);
+        setWordEntered('');
+    };
+    //
+    function handleSelect(eventKey) {
+        setActivePage(eventKey);
+    }
+    //
+    const data = [...customer].reverse().filter((v, i) => {
+        const start = 10 * (activePage - 1);
+        const end = start + 10;
+        return i >= start && i < end;
+    });
     return (
         <>
             <div className="wrapper--dasboard" id="wrapper--dasboard">
@@ -68,8 +117,14 @@ function Customers() {
                         <span className="table--customer--title">Danh sách khách hàng</span>
                         <div className="table--customer--action">
                             <div className="customer--search--wrapper">
-                                <input className="customer--search--input" placeholder="Tìm kiếm... " />
+                                <input
+                                    className="customer--search--input"
+                                    placeholder="Tìm kiếm... "
+                                    onChange={handleFilter}
+                                    value={wordEntered}
+                                />
                                 <div>
+                                    {!wordEntered.length === 0 && <i onClick={clearInput} class="fa-solid fa-x"></i>}
                                     <i className="fa-solid fa-magnifying-glass search--icon"></i>
                                 </div>
                             </div>
@@ -80,67 +135,65 @@ function Customers() {
                                 </div>
                             </div>
                         </div>
-                        <div className="table--customer" id="table--customer">
-                            <div className="customer--header--wrapper">
-                                <FlexboxGrid align="middle" className="show-grid grid--title--customer">
-                                    <FlexboxGrid.Item className="item--customer" colspan={4}>
-                                        HỌ VÀ TÊN
-                                    </FlexboxGrid.Item>
-                                    <FlexboxGrid.Item className="item--customer" colspan={3}>
-                                        SDT
-                                    </FlexboxGrid.Item>
-                                    <FlexboxGrid.Item className="item--customer" colspan={3}>
-                                        NGÀY SINH{' '}
-                                    </FlexboxGrid.Item>
-                                    <FlexboxGrid.Item className="item--customer" colspan={6}>
-                                        ĐỊA CHỈ
-                                    </FlexboxGrid.Item>
-                                    <FlexboxGrid.Item className="item--customer" colspan={5}>
-                                        EMAIL
-                                    </FlexboxGrid.Item>
-                                    <FlexboxGrid.Item className="item--customer customer--action" colspan={3}>
-                                        CHỨC NĂNG
-                                    </FlexboxGrid.Item>
-                                </FlexboxGrid>
-                            </div>
-
-                            <div className="customer--wrapper--item" id="customer__id">
-                                {[...customer].reverse().map((item, index) => {
-                                    let focusElement;
-                                    if (index !== 0 && index % 2 !== 0) {
-                                        focusElement = 'table--item--bold';
-                                    } else {
-                                        focusElement = '';
-                                    }
-                                    return (
-                                        <Customer
-                                            editCustomer={editCustomer}
-                                            deleteCustomer={deleteCustomer}
-                                            key={item.id}
-                                            item={item}
-                                            forcus={focusElement}
-                                        />
-                                    );
-                                })}
-                            </div>
-                            <div className="wrapper--paging">
-                                <span className="paging--text">Số bản ghi</span>
-                                <div className="paging--short">
-                                    <select aria-label="State" className="paging--short--number">
-                                        <option value="10">10</option>
-                                        <option value="15">15</option>
-                                        <option value="20">20</option>
-                                    </select>
-                                </div>
-                                <div className="paging--count" id="countpage">
-                                    1-10 of 20
-                                </div>
-                                <div className="paging--action">
-                                    <i className="fa-solid fa-chevron-left paging--action--icon customer--prePage"></i>
-                                    <i className="fa-solid fa-chevron-right paging--action--icon customer--nextPage"></i>
-                                </div>
-                            </div>
+                        <div className="customer--header--wrapper">
+                            <FlexboxGrid align="middle" className="show-grid grid--title--customer">
+                                <FlexboxGrid.Item className="item--customer" colspan={4}>
+                                    HỌ VÀ TÊN
+                                </FlexboxGrid.Item>
+                                <FlexboxGrid.Item className="item--customer" colspan={3}>
+                                    SDT
+                                </FlexboxGrid.Item>
+                                <FlexboxGrid.Item className="item--customer" colspan={3}>
+                                    NGÀY SINH{' '}
+                                </FlexboxGrid.Item>
+                                <FlexboxGrid.Item className="item--customer" colspan={6}>
+                                    ĐỊA CHỈ
+                                </FlexboxGrid.Item>
+                                <FlexboxGrid.Item className="item--customer" colspan={5}>
+                                    EMAIL
+                                </FlexboxGrid.Item>
+                                <FlexboxGrid.Item className="item--customer customer--action" colspan={3}>
+                                    CHỨC NĂNG
+                                </FlexboxGrid.Item>
+                            </FlexboxGrid>
                         </div>
+                        <div className="customer--wrapper--item" id="customer__id">
+                            {data.map((item, index) => {
+                                let focusElement;
+                                if (index !== 0 && index % 2 !== 0) {
+                                    focusElement = 'table--item--bold';
+                                } else {
+                                    focusElement = '';
+                                }
+                                return (
+                                    <CustomerTable
+                                        editCustomer={editCustomer}
+                                        deleteCustomer={deleteCustomer}
+                                        key={item.id}
+                                        item={item}
+                                        forcus={focusElement}
+                                        prodvice={prodvice}
+                                    />
+                                );
+                            })}
+                        </div>
+                    </div>
+                    {/* paging */}
+                    <div className="wrapper--paging">
+                        <Pagination
+                            prev
+                            last
+                            next
+                            first
+                            layout={['total', '|', 'pager', 'skip']}
+                            size="md"
+                            pages={Math.ceil(customer.length / 10)}
+                            activePage={activePage}
+                            onSelect={handleSelect}
+                            total={customer.length}
+                            ellipsis
+                            boundaryLinks
+                        />
                     </div>
                 </div>
                 <div className="wrapper--footer">

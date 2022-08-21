@@ -1,22 +1,23 @@
 import { useState, useEffect } from 'react';
 
-import { Drawer, Button, Placeholder } from 'rsuite';
+import { Drawer, Button, Placeholder, InputPicker } from 'rsuite';
 import { Form, Field } from 'react-final-form';
 import { getProducts } from '../../../ApiService/apiProduct';
+import PropTypes from 'prop-types'
 
 function FilterCustomer(props) {
     const { filter: render } = props;
 
     const [open, setOpen] = useState(false);
-    const [product, setProduct] = useState();
     const [listProduct, setListProduct] = useState([]);
+    const [filterData, setDataFilter] = useState({ name: '', mobile: '', product: '', email: '' });
 
     const handleOpen = () => setOpen(true);
 
     const onSubmit = async (values) => {
+        setDataFilter({ name: values.full_name, mobile: values.mobile, product: values.product, email: values.email });
         render(values);
         setOpen(false);
-        console.log(values);
     };
     // get data product
     useEffect(() => {
@@ -28,7 +29,7 @@ function FilterCustomer(props) {
         });
         return () => (mounted = false);
     }, []);
-
+    const data = listProduct.map((item) => ({ label: item.name, value: item.name }));
     return (
         <div>
             <Button onClick={() => handleOpen('top')}>Bộ lọc</Button>
@@ -40,7 +41,13 @@ function FilterCustomer(props) {
                     <Placeholder.Graph overflow={false} classPrefix="popup--filtercustomer">
                         <Form
                             onSubmit={onSubmit}
-                            render={({ handleSubmit, form, submitting, pristines, values }) => (
+                            initialValues={{
+                                full_name: filterData.name,
+                                email: filterData.email,
+                                mobile: filterData.mobile,
+                                product: filterData.product,
+                            }}
+                            render={({ handleSubmit, form, values }) => (
                                 <form onSubmit={handleSubmit} className="from--filtercustomer">
                                     <div className="grid--filtercustomer--wrapper">
                                         <div className="grid--addcustomer--item">
@@ -63,27 +70,21 @@ function FilterCustomer(props) {
                                             <span className="addcustomer--name--after">SDT</span>
                                         </div>
                                         <div className="grid--addcustomer--item">
-                                            <Field
-                                                className="addcustomer--input--name"
-                                                name="product"
-                                                component="select"
-                                                type="text"
-                                                placeholder="Sản phẩm đã mua"
-                                                initialValue={product}
-                                                onChange={(e) => {
-                                                    setProduct(e.target.value);
-                                                }}
-                                            >
-                                                {listProduct &&
-                                                    listProduct.map((item) => {
-                                                        return (
-                                                            <option name={item.code} key={item.code}>
-                                                                {item.name}
-                                                            </option>
-                                                        );
-                                                    })}
+                                            <Field className="addcustomer--input--name" name="product">
+                                                {(props) => (
+                                                    <div className="wrapper--filed">
+                                                        <InputPicker
+                                                            className="addcustomer--input--name"
+                                                            data={data}
+                                                            onChange={(value) => {
+                                                                values.product = value
+                                                            }}
+                                                            placeholder={`Sản phẩm đã mua: ${values.product}`}
+                                                  
+                                                        />
+                                                    </div>
+                                                )}
                                             </Field>
-                                            <span className="affter--filter--productsales">Sản phầm đã mua</span>
                                         </div>
                                         <div className="grid--addcustomer--item">
                                             <Field
@@ -103,6 +104,18 @@ function FilterCustomer(props) {
                                                 color="green"
                                             >
                                                 Lọc
+                                            </Button>
+                                            <Button
+                                                className="button--filter--Customer"
+                                                color="blue"
+                                                onClick={(values) => {
+                                                    setDataFilter({ ...filterData,name: '', mobile: '', product: '', email: '' });
+                                                    form.reset();
+                                                    render(values);
+                                                }}
+                                                appearance="primary"
+                                            >
+                                                Lọc lại
                                             </Button>
                                             <Button
                                                 color="red"
