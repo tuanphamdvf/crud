@@ -7,7 +7,6 @@ const elementRouter =[
     { path: '/', component: Dashbroad },
     { path: '/product', component: Products },
     { path: '/customer', component: Customers },
-    { path: '/order', component: Orders },
     { path: '/addproduct', component: AddProduct },
 
 ]

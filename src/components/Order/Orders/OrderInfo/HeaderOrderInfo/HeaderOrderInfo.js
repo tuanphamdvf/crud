@@ -35,66 +35,7 @@ function HeaderOrderInfo(props) {
 
     return (
         <>
-            <div className="grid--header--infoorder">
-                <div>
-                    <span className="active frontXs">{totalOrder}</span>
-                    <span className="active frontXs"> đơn hàng </span>
-                </div>
-                <div>
-                    {' '}
-                    <span className="active">- Tổng : </span>
-                    <span className="green frontXs">{numberWithCommas(!tottal === undefined ? tottal : totalReport)}đ </span>
-                </div>
-                <div>
-                    {' '}
-                    <span className="red frontXs">- Nợ: </span>
-                    <span className="red frontXs">{numberWithCommas(!debit === undefined ? debit : totalDebit)}đ</span>
-                </div>
-            </div>
-            <FinalForm
-                onSubmit={onSubmit}
-                initialValues={{}}
-                render={({ handleSubmit, values }) => (
-                    <FromRsuite onSubmit={handleSubmit}>
-                        <FormGroup>
-                            <Field
-                                initialValue={arrayDay}
-                                defaultstyle
-                                name="full_name"
-                                component={RSDateRangePicker}
-                                placeholder="Từ ngày - Đến ngày"
-                                onOk={(e) => {
-                                    if (e) {
-                                        const array = e.map((item) => {
-                                            return parseFloat(removeString(handleDay(item)));
-                                        });
-                                        if (array) {
-                                            const reportOrder = rootOrder.filter((item) => {
-                                                const dateCreate = parseFloat(removeString(item.createDate));
-                                                return dateCreate >= array[0] && dateCreate <= array[1];
-                                            });
-                                            if (reportOrder === undefined) {
-                                                renderReport(reportOrder);
-                                                setTotal(0);
-                                                setDebit(0);
-                                            } else {
-                                                renderReport(reportOrder);
-                                                setTotal(totalOrderCartReport(reportOrder, 'total'));
-                                                setDebit(totalOrderCartReport(reportOrder, 'debit'));
-                                            }
-                                        }
-                                    }
-                                }}
-                                onClean={() => {
-                                    renderReport(rootOrder);
-                                    setTotal(totalReport);
-                                    setTotal(totalDebit);
-                                }}
-                            ></Field>
-                        </FormGroup>
-                    </FromRsuite>
-                )}
-            />
+            
         </>
     );
 }
