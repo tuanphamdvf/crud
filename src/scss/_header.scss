@@ -41,12 +41,15 @@
 }
 
 .header--icon {
-    @include flexCenter;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 4px;
-    width: 32px;
+    width: 150px;
     height: 32px;
-    background: $white;
+    background: #ffffff;
     border-radius: 16px;
+    position: relative;
 }
 
 .header--icon--content {
@@ -98,4 +101,19 @@
     .header--title {
         display: none;
     }
+}
+.user{
+    margin-right: 32px;
+    color: $gray500;
+}
+.showlogout{
+@include fontS;
+@include flexBetween;
+position: absolute;
+bottom: -20px;
+right: -62px;
+width: 88px;
+
+
+
 }

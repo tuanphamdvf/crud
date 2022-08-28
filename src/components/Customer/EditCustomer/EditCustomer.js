@@ -24,13 +24,27 @@ const EditCustomer = (props) => {
         if (values.mobile) {
             values.mobile = values.mobile.replace(/\s/g, '');
         }
+
+        let newValue = {
+            city: values.city,
+            distrist: values.distrist,
+            idproduct: 'Iphone X',
+            mobile: values.mobile,
+            dob: values.dob,
+            full_name: values.full_name,
+            gen: i.gen,
+            email: values.email,
+            avata: i.avata,
+            id:i.id
+        };
+
         if(i.id){
-            await EditCustomerApi({ ...values, mobile: values.mobile }, i.id,editStatus('success'),);
-            await edit({ ...values, mobile: values.mobile }, i.id);
+            await EditCustomerApi(newValue, i.id,editStatus('success'),);
+            await edit(newValue, i.id);
             setOpen(false);
         }else{
             editStatus("warning")
-            window.location.reload()
+            setOpen(false);
         }
         
     };
@@ -49,7 +63,7 @@ const EditCustomer = (props) => {
             });
         } else {
             Notification[funcName]({
-                title: 'Vui lòng thử lại !!',
+                title: 'Có lỗi, vui lòng Refesh trang và thử lại !!',
                 duration: 4000
             });
         }
@@ -59,7 +73,7 @@ const EditCustomer = (props) => {
             <i className="fa-solid fa-pen-to-square editcustomer--buton" onClick={() => handleOpen()}></i>
             <Modal onHide={handleClose} overflow={false} size={'lg'} show={open}>
                 <Modal.Header>
-                    <Modal.Title>Cập nhật khách hàng "{i.full_name} "</Modal.Title>
+                    <Modal.Title>Cập nhật khách hàng "{i.full_name} - {i.id}"</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Placeholder.Graph height="300px" classPrefix="popup--addcustomer"> 
@@ -121,7 +135,7 @@ const EditCustomer = (props) => {
                                                             className="addcustomer--input--name"
                                                             {...input}
                                                             type="text"
-                                                            placeholder="0xxx.xxx.xxx"
+                                                            placeholder="___ ___ ____"
                                                         />
                                                         {meta.error && meta.touched && (
                                                             <span className="warning">{meta.error}</span>
@@ -169,7 +183,8 @@ const EditCustomer = (props) => {
                                                 className="addcustomer--input--name"
                                                 name="dob"
                                                 component="input"
-                                                type="date"
+                                                type='date'
+                                          
                                             />
                                             <span className="addcustomer--name--after">Ngày sinh</span>
                                         </div>

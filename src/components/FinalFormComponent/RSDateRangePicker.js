@@ -9,10 +9,11 @@ RSDateRangePicker.propTypes = {
   defaultdate: PropTypes.string,
 }
 function RSDateRangePicker(props) {
-  const { inputstyle, input, inputclassname, timeformat, defaultdate, ...rest } = props
+  const { inputstyle, input, inputclassname, timeformat, defaultdate,max, ...rest } = props
   return (
     <CustomField
       {...props}
+      
       style={inputstyle}
       className={`w-100 ${inputclassname}`}
       placement="auto"
@@ -22,5 +23,4 @@ function RSDateRangePicker(props) {
     />
   )
 }
-
 export default memo(RSDateRangePicker)

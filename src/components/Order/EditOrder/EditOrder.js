@@ -2,8 +2,7 @@ import { Modal, Button, Placeholder, ButtonToolbar, Icon, Popover, Whisper, Flex
 import { useState, useRef, useEffect } from 'react';
 import { Form as FinalForm, Field } from 'react-final-form';
 import PropTypes from 'prop-types';
-import { AddCustomerApi } from '../../../ApiService/apiCustomer';
-import { addOrderApi } from '../../../ApiService/ApiOrder';
+import {  editOrderApi } from '../../../ApiService/ApiOrder';
 import { normalizePhone, totalHanlder } from '../../Function/Function';
 import { Form as FromRsuite, FormGroup, ControlLabel } from 'rsuite';
 
@@ -11,7 +10,7 @@ import TextCustomField from '../../FinalFormComponent/TextCustomField';
 import InputPickerCustomField from '../../FinalFormComponent/InputPickerCustomField';
 import DatePickerCustomField from '../../FinalFormComponent/DatePickerCustomField';
 import RadioCustomField from '../../FinalFormComponent/RadioCustomField';
-import UploadAvataFrom from '../../Customer/AddCustomer/UploadForm/UploadAvataFrom';
+
 import NumberCustomField from '../../FinalFormComponent/NumberCustomField';
 import NumberFormatField from '../../FinalFormComponent/NumberFormatField';
 import arrayMutators from 'final-form-arrays';
@@ -20,15 +19,12 @@ import { today } from '../../../ApiService/Apiservice';
 import { InfoOrder, MessValidate } from '../../SupportUser/Mess';
 import { openNotifi } from '../../SupportUser/Notify';
 
-const AddOrder = (props) => {
-    const { product, customer, orders, prodvice = ['Hà Nội'], onGetdata } = props;
+const EditOrder = (props) => {
+    const { product, customer, orders, prodvice = ['Hà Nội'], editOrder, item } = props;
     const [open, setOpen] = useState(false);
     const [user, setUser] = useState();
-
-    const [idAvataCurrent, setIdAvataCurrent] = useState('');
-    const [idRef, setIdRef] = useState('');
     const [dis, setDis] = useState([]);
-    const [statusEdit, setStatusEdit] = useState(false);
+    const [statusEdit, setStatusEdit] = useState(true);
     const [isDebit, setIsDebit] = useState();
 
     useEffect(() => {
@@ -42,13 +38,11 @@ const AddOrder = (props) => {
 
     const handleClose = async () => {
         setOpen(false);
-        setIdAvataCurrent('');
     };
     const saveData = useRef();
 
     // add item and rendering component parrent with callback
     const onSubmit = async (values) => {
-
         if (!values.city) {
             values.city = prodvice[0].name;
             if (!values.districst) {
@@ -58,43 +52,20 @@ const AddOrder = (props) => {
         if (values.mobile) {
             values.mobile = values.mobile.replace(/\s/g, '');
         }
-        if (isDebit) {
+        if (values.debit > 0) {
             values.status = 'Còn nợ';
-            values.due = 0
         } else {
             values.status = 'Hoàn thành';
-            values.debit =0
         }
-
-        if (!statusEdit) {
-            let newCustomer = {
-                city: values.city,
-                address: values.address,
-                distrist: values.districst,
-                full_name: values.full_name,
-                note: values.note,
-                avata: `idavata${idRef}`,
-                mobile: values.mobile,
-                gen: values.gen,
-                email: values.email,
-                idproduct: values.product,
-                idorder: values.idorder,
-            };
-            await AddCustomerApi(newCustomer, openNotifi('success', 'customer', 'add') );
-        }
-
         let newValue = {
             ...values,
             mobile: values.mobile,
-            userCreate: user
         };
-        await addOrderApi(newValue, openNotifi('success','order','add'));
-        await onGetdata(newValue);
-
+        await editOrderApi(newValue,item.idoder, openNotifi('success','order', 'edit'));
+       await editOrder(newValue,item.idorder)
         setOpen(false);
-        setIdAvataCurrent('');
     };
-    const data = prodvice.map((item) => ({ label: item.name, value: item.name }));
+
     const dataMobile = customer.map((item) => {
         return item.mobile;
     });
@@ -108,13 +79,6 @@ const AddOrder = (props) => {
         console.log(dataProduct);
         return dataProduct;
     }
-    function handleCity(city) {
-        const dataDis = prodvice.find((item) => item.name === city);
-        const data = dataDis.districts.map((item) => ({ label: item.name, value: item.name }));
-        setDis(data);
-    }
-
-    const getIdRef = (id) => setIdRef(id);
 
     //validate
     const required = (value) => (value ? undefined : MessValidate.required);
@@ -138,22 +102,22 @@ const AddOrder = (props) => {
     ];
     const speakerCus = (
         <Popover title="Lưu ý">
-            <InfoOrder value="spOrderCreate" />
+            <InfoOrder value="spEditOrderInfo" />
         </Popover>
     );
     const speakerID = (
         <Popover title="Mã đơn hàng là bắt buộc và duy nhất !">
-            <InfoOrder value="spOrderId" />
+            <InfoOrder value="spEditOrderID" />
         </Popover>
     );
-
     return (
         <>
-            <Button color="green" appearance="primary"   onClick={() => handleOpen()}>Tạo đơn hàng</Button>
+            <i onClick={() => handleOpen()} className="fa-solid fa-pen-to-square editcustomer--buton"></i>
+
             <Modal overflow={false} size="lg" show={open} onHide={handleClose}>
                 <Modal.Header>
                     <Modal.Title>
-                        Thêm mới khách hàng
+                     Sửa đơn hàng
                         <span className="title--addOrder">
                             Người lập: <u>{user}</u>{' '}
                         </span>
@@ -166,7 +130,7 @@ const AddOrder = (props) => {
                                 ...arrayMutators,
                             }}
                             onSubmit={onSubmit}
-                            initialValues={{}}
+                            initialValues={{ ...item }}
                             render={({
                                 handleSubmit,
                                 form,
@@ -174,15 +138,14 @@ const AddOrder = (props) => {
                                 pristine,
                                 values,
                                 form: {
-                                    mutators: { push, pop, remove },
+                                    mutators: { push, pop },
                                 },
-                        
                             }) => (
                                 <FromRsuite onSubmit={handleSubmit} ref={saveData} className="from--addcustomer">
-                                    {' '}
+                                    {/* {' '}  <pre>{JSON.stringify(values, 0, 2)}</pre> */}
                                     <div className="grid--addOrder--wrapper">
                                         <div className="addorder--wrapper--info flexBetween">
-                                            
+                                 
                                             <FormGroup classPrefix="">
                                                 <Field
                                                     name="createDate"
@@ -208,25 +171,31 @@ const AddOrder = (props) => {
                                                         form.change('districst', findCustomer(id).distrist);
                                                         form.change('address', findCustomer(id).address);
                                                         form.change('mobile', findCustomer(id).mobile);
-                                                        form.change('idorder', orders[orders.length - 1].id + 1);
                                                         form.change('gen', findCustomer(id).gen);
-                                                        setIdAvataCurrent(findCustomer(id).avata);
+
                                                         setStatusEdit(true);
                                                     }}
                                                     onClean={() => {
-                                                        form.reset();
+                                                        form.change('full_name', '');
+                                                        form.change('email', '');
+                                                        form.change('city', '');
+                                                        form.change('districst', '');
+                                                        form.change('address', '');
+                                                        form.change('mobile', '');
+                                                        form.change('gen', 'Nữ');
                                                         setStatusEdit(false);
-                                                        setIdRef('');
-                                                        setDis([]);
-                                                        setStatusEdit(false);
-
-                                                        setIdAvataCurrent('');
                                                     }}
                                                 ></Field>
                                                 <ControlLabel classPrefix="addcustomer--name--after ">Tìm khách hàng</ControlLabel>
                                             </FormGroup>
-                                            <FormGroup classPrefix="idorder">
-                                                <Field name="idorder" component={TextCustomField} validate={required} disabled></Field>
+                                            <FormGroup classPrefix="idoder">
+                                                <Field
+                                                    name="idoder"
+                                                    component={TextCustomField}
+                                                    validate={required}
+                                                    initialValue={item.id}
+                                                    disabled
+                                                ></Field>
                                                 <ControlLabel classPrefix="addcustomer--name--after ">
                                                     Mã hoá đơn *{' '}
                                                     <Whisper placement="bottomStart" trigger="hover" speaker={speakerID}>
@@ -254,14 +223,13 @@ const AddOrder = (props) => {
                                                             disabled={statusEdit}
                                                             placeholder="___ ___ ____"
                                                             onBlur={(e) => {
-                                                                form.change('idorder', orders[orders.length - 1].idorder + 1);
+                                                                form.change('idoder', orders[orders.length - 1].idoder + 1);
                                                                 let value = e.target.value;
                                                                 if (value) {
                                                                     value = value.replace(/\s/g, '');
                                                                 }
                                                                 if (dataMobile.find((item) => item === value)) {
                                                                     setDis(findCustomer(value).districts);
-                                                                    setIdAvataCurrent(findCustomer(value).avata);
 
                                                                     if (dis) {
                                                                         form.change('full_name', findCustomer(value).full_name);
@@ -269,7 +237,8 @@ const AddOrder = (props) => {
                                                                         form.change('dob', findCustomer(value).dob);
                                                                         form.change('city', findCustomer(value).city);
                                                                         form.change('districst', findCustomer(value).distrist);
-                                                                        setIdAvataCurrent(findCustomer(value).avata);
+                                                                        openNotifi('warning', 'edit');
+
                                                                         setStatusEdit(false);
                                                                     }
                                                                 }
@@ -286,12 +255,7 @@ const AddOrder = (props) => {
                                                             placeholder=""
                                                             disabled={statusEdit}
                                                             onBlur={() => {
-                                                                if(!values.idorder ){
-                                                                    form.change('idorder', orders[orders.length - 1].idorder + 1);
-                                                                }else if(!values.idorder && orders ===[]){
-                                                                    openNotifi('warning', 'order','add')
-                                                                }
-                                                              
+                                                                form.change('idoder', orders[orders.length - 1].idoder + 1);
                                                             }}
                                                         ></Field>
 
@@ -303,9 +267,9 @@ const AddOrder = (props) => {
                                                             disabled={statusEdit}
                                                             component={RadioCustomField}
                                                             inputvalue={gen}
+                                            
                                                             className="addorder--gen"
                                                             placeholder="..."
-                                                            initialValue="nữ"
                                                         ></Field>
                                                     </FormGroup>
                                                 </div>
@@ -329,11 +293,7 @@ const AddOrder = (props) => {
                                                             placeholder="..."
                                                             name="city"
                                                             disabled={statusEdit}
-                                                            component={InputPickerCustomField}
-                                                            inputvalue={data}
-                                                            onSelect={(value) => {
-                                                                handleCity(value);
-                                                            }}
+                                                            component={TextCustomField}
                                                         ></Field>
 
                                                         <ControlLabel classPrefix="addcustomer--name--after ">Tỉnh/ Thành phố</ControlLabel>
@@ -341,8 +301,7 @@ const AddOrder = (props) => {
                                                     <FormGroup>
                                                         <Field
                                                             name="districst"
-                                                            component={InputPickerCustomField}
-                                                            inputvalue={dis}
+                                                            component={TextCustomField}
                                                             disabled={statusEdit}
                                                             placeholder="..."
                                                         ></Field>
@@ -350,29 +309,11 @@ const AddOrder = (props) => {
                                                         <ControlLabel classPrefix="addcustomer--name--after ">Quận/huyện</ControlLabel>
                                                     </FormGroup>
                                                     <FormGroup>
-                                                        <Field
-                                                            name="address"
-                                                            component={TextCustomField}
-                                                            placeholder="..."
-                                                        ></Field>
+                                                        <Field name="address" component={TextCustomField} placeholder="..."></Field>
 
                                                         <ControlLabel classPrefix="addcustomer--name--after">Địa chỉ giao hàng</ControlLabel>
                                                     </FormGroup>
                                                 </div>
-                                            </div>
-                                            <div className="addorder--avata">
-                                                <FormGroup>
-                                                    <Field
-                                                        disabled={statusEdit}
-                                                        IdcusEdit={idAvataCurrent}
-                                                        getId={getIdRef}
-                                                        name="avata"
-                                                        component={UploadAvataFrom}
-                                                        {...props}
-                                                    ></Field>
-
-                                                    <ControlLabel classPrefix="gen--addorder--avata">Avata</ControlLabel>
-                                                </FormGroup>
                                             </div>
                                         </div>
                                         <FlexboxGrid align="middle" className="addorder--product">
@@ -403,7 +344,6 @@ const AddOrder = (props) => {
                                                                             inputvalue={product}
                                                                             labelKey="name"
                                                                             valueKey="id"
-                                                                            // validate={required}
                                                                             onSelect={(id) => {
                                                                                 form.change(`${name}.price`, findProduct(id).price);
                                                                                 form.change(`${name}.name`, findProduct(id).name);
@@ -516,11 +456,11 @@ const AddOrder = (props) => {
                                                                 <FlexboxGrid.Item className="minusproduct" colspan={2}>
                                                                     {' '}
                                                                     <Field
-                                                                        name={`${name}.minus`}
+                                                                        name={`${name}.name`}
                                                                         component={TextCustomField}
                                                                         disabled
                                                                     ></Field>
-                                                                    <i onClick={()=>remove('product',index)} class="fa-solid fa-minus"></i>{' '}
+                                                                    <i class="fa-solid fa-minus"></i>{' '}
                                                                 </FlexboxGrid.Item>
                                                             </FlexboxGrid>
                                                         ))
@@ -530,15 +470,12 @@ const AddOrder = (props) => {
                                             <div className="addorder--voucher grid--handle">
                                                 <div>Giảm giá</div>
                                                 <FormGroup>
-                                                    
                                                     <Field
-                                                        defaultstyle
                                                         name="sale"
-                                                        validate={function(e){if (e > values.total){  openNotifi('error','order','sale'); return '.' }else return undefined}}
                                                         component={NumberFormatField}
                                                         onChange={(e) => {
                                                             const i = parseInt(e.target.value.replace(/[^0-9]/g, ''));
-                                                   
+
                                                             if (!i) {
                                                                 form.change('total', totalHanlder(values.product));
                                                             }
@@ -552,7 +489,7 @@ const AddOrder = (props) => {
                                                                             form.change('due', values.money - values.total);
                                                                         } else {
                                                                             form.change('debit', values.total - values.money);
-                                                                     
+                                                                            console.log(values);
                                                                         }
                                                                     }
                                                                 }
@@ -569,20 +506,6 @@ const AddOrder = (props) => {
                                             </div>
                                             <div className="addorder--credit grid--handle">
                                                 <div>Tổng tiền thanh toán </div>
-                                                <Button onClick={()=>{
-                                                    if(values.total){
-                                                        form.change('money',values.total )
-                                                        if(values.debit || values.due){
-                                                            form.change('debit',0)
-                                                            form.change('due',0)
-
-                                                        }
-                                                    }
-                                                 
-                                                }} className='finsish--money' appearance="ghost"  size='xs' color="green">
-                                                trả hết
-                                                
-                                            </Button>
                                                 <FormGroup>
                                                     <Field
                                                         step={100000}
@@ -601,7 +524,7 @@ const AddOrder = (props) => {
                                                         }}
                                                     ></Field>
                                                 </FormGroup>
-                                                {isDebit ? (
+                                                {item.debit > 0 ? (
                                                     <div className="debit--wrapper">
                                                         <div className="affter--debit--due">Còn nợ </div>
                                                         <FormGroup>
@@ -625,16 +548,14 @@ const AddOrder = (props) => {
                                         </div>
 
                                         <ButtonToolbar className="buttons addcustomer--button--submit">
-                                            <Button appearance="primary" type="submit" disabled={submitting || pristine} color="green">
-                                                Tạo mới
+                                            <Button appearance="primary" type="submit" disabled={submitting || pristine} color="blue">
+                                                Cập nhật 
                                             </Button>
                                             <Button
                                                 onClick={() => {
                                                     form.reset();
                                                     setStatusEdit(false);
-                                                    setIdRef('');
                                                     setDis([]);
-                                                    setIdAvataCurrent('');
                                                 }}
                                                 color="blue"
                                             >
@@ -656,7 +577,7 @@ const AddOrder = (props) => {
         </>
     );
 };
-AddOrder.protoType = {
+EditOrder.protoType = {
     deleteCustomer: PropTypes.func.isRequired,
     onGetdata: PropTypes.func.isRequired,
     product: PropTypes.array.isRequired,
@@ -665,4 +586,4 @@ AddOrder.protoType = {
     prodvice: PropTypes.array.isRequired,
     user: PropTypes.string,
 };
-export default AddOrder;
+export default EditOrder;

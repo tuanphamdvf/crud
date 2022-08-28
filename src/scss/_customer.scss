@@ -2,7 +2,7 @@
     display: flex;
     width: 100%;
     max-width: 1317px;
-    min-height: 799px;
+    min-height: 850px;
     box-sizing: border-box;
     gap: 16px;
     flex-direction: column;
@@ -34,6 +34,7 @@
 .table--customer--action {
     width: 100%;
     @include flexBetween;
+    margin-bottom: 16px;
 }
 
 .table--customer--filter {
@@ -214,6 +215,7 @@
 
 //paging
 .wrapper--paging {
+
     padding-top: 16px;
     width: 100%;
     height: 50px;
@@ -223,7 +225,7 @@
     gap: 16px;
     position: absolute;
     right: 16px;
-    bottom: 32px;
+    bottom: 0;
 }
 
 .paging--text {
@@ -303,8 +305,9 @@
 }
 
 .grid--item--customer {
-    height: 49px;
+    height: 54px;
     padding: 16px;
+    position: relative;
 }
 
 .grid--title--customer {
@@ -314,12 +317,20 @@
 .item--customer--grid {
     height: 100%;
 }
-
+.item--customer{
+    color: $gray500;
+    font-size: 12px;
+}
 .action--customer {
-    width: 70px;
+    width: 120px;
     display: flex;
     justify-content: space-between;
     padding-left: 16px;
+    i{
+        cursor: pointer;
+        padding: 4px;
+        width: 16px;
+    }
 }
 
 .popup--addcustomer {
@@ -332,12 +343,16 @@
     position: absolute;
     right: 0px;
     bottom: -36px;
+    display: flex;
+    justify-content: space-between;
+    width: 162px;
 }
 
 .addcustomer--button--back {
+
     position: absolute;
     bottom: 0;
-    right: 90px;
+    right: 180px;
 }
 
 .grid--addcustomer--wrapper {
@@ -345,35 +360,135 @@
     height: 100%;
     display: grid;
     grid-template-columns: 48% 48%;
-    grid-template-rows: auto;
-    grid-gap: 42px;
+    grid-template-rows: 60px;
+    grid-gap: 40px;
+}
+.grid--addcustomer--groupdate{
+    display: flex;
+    justify-content: flex-start;
+    position: relative;
+    border-radius: 8px;
+    border: none;
+    align-items: center;
+    gap: 32px;
 
+div{
+    position: relative;
+ div{
+    form{
+        display: flex;
+   
+div{
+    div{
+        div{
+            input{
+                height: 60px;
+            }
+        }
+    }
+}
+    }
+ }
+  
+}
+div{
+    position: relative;
 
 }
+}
+.gen--input{
+    background-color: $white;
+    height: 12px;
+    width: 100px;
+    border-radius: 2px;
+    position: absolute;
+    top: -16px;
+    left: -16px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 12px;
+    color: $gray500;
+    text-align: center;
+    z-index: 10;
+}
+.gen--input--avata{
+    position: absolute;
+    top: -24px;
+    left: 16px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 12px;
+    color: $gray500;
+}
+
 
 .grid--addcustomer--item {
+    display: flex;
+    flex-direction: column;
+   
+    position: relative;
+    border-radius: 8px;
+    border: none;
+    align-items: flex-start;
+    
+}
+
+.grid--addcustomer--address {
     display: flex;
     flex-direction: column;
     justify-content: center;
     position: relative;
     border-radius: 8px;
-    border: solid 1px $gray200;
+    border: none;
     align-items: flex-start;
-    padding-left: 16px;
-    position: relative;
+    div {
+        width: 100%;
+        height: 60px;
+
+        div {
+            width: 100%;
+
+            div {
+                width: 100%;
+                    a{
+                        height: 58px !important;
+                        display: flex;
+                        align-items: center !important;
+                        span{
+                            height: 100%;
+                            display: flex;
+                            align-items: center;
+                        }
+                    }
+
+                    div {
+                        width: 100%;
+
+                        input {
+                            height: 60px;
+                        }
+                    }
+                
+            }
+        }
+
+    }
 }
+
 
 .from--addcustomer {
 
     width: 100%;
     height: 100%;
+
 }
+
 
 .addcustomer--name--after {
     background-color: $white;
     height: 12px;
-    width: 58px;
-    border-radius: 2px;
+    width: 100px;
+    border-radius: 4px;
     position: absolute;
     top: -6px;
     left: 16px;
@@ -382,17 +497,27 @@
     line-height: 12px;
     color: $gray500;
     text-align: center;
+    z-index: 10;
 }
 
 .addcustomer--input--name {
-    border: none;
-    height: 100%;
-    padding-left: 8px;
-    width: 96%;
+    border: 1px solid $gray200;
+    height: 54px !important;
+    width: 430px !important;
+    padding-left: 16px;
     outline: none !important;
     cursor: pointer;
+    border-radius: 6px;
+
+    &:focus {
+        outline: none !important;
+        border: 1px solid $blue300;
+        box-shadow: 0 0 10px $gray050;
+    }
+
 
 }
+
 
 .editcustomer--buton {
     color: $blue500;
@@ -469,12 +594,15 @@
     height: 39px;
 }
 
-.wrapper--filed{
+.wrapper--filed {
     width: 100%;
-    height: 32px;
-    border: none !important
+    height: 100%;
+    border: none;
+    box-sizing: border-box;
+
 }
-.affter--filter--productsales{
+
+.affter--filter--productsales {
     background-color: $white;
     height: 12px;
     width: 112px;
@@ -487,21 +615,57 @@
     line-height: 12px;
     color: $gray500;
 }
-.rs-table-cell-content{
+
+
+.rs-table-cell-content {
     display: flex;
     align-items: center;
 }
-.rs-table-body-row-wrapper{
-    height: 500px!important;
+
+.rs-table-body-row-wrapper {
+    height: 500px !important;
 }
-.rs-table-cell{
+
+.rs-table-cell {
     font-size: 12px;
-    font-weight:600;
+    font-weight: 600;
     line-height: 24px;
     color: $gray900;
 }
-.addOder--button--action{
+
+.addOder--button--action {
     color: $blue600;
     cursor: pointer;
     padding: 4px;
+}
+.rs-picker-search-input{
+    display: flex !important;
+    align-items: center !important;
+}
+///
+.info--customer--table{
+height: 80px;
+width: 100%;
+padding-left: 16px;
+display: flex;
+justify-content: flex-start;
+align-items: center;
+gap: 32px;
+}
+.info--avata--wrapper{
+    height: 80px;
+    border-radius: 12px;
+    
+
+}
+.info--des--wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    flex-grow: 1;
+}
+#upload_img{display: none}
+.info--avata--wrapper{
+    cursor: pointer;
 }

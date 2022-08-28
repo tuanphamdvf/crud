@@ -1,86 +1,173 @@
-import { Modal, Button, Placeholder, InputPicker, Notification } from 'rsuite';
-import { useState, useEffect } from 'react';
-import { Form, Field } from 'react-final-form';
+import { Modal, Button, Placeholder, Notification, ButtonToolbar } from 'rsuite';
+import { useState, useRef } from 'react';
+import { Form as FinalForm, Field } from 'react-final-form';
 
-import { AddCustomerApi } from '../../../ApiService/apiCustomer';
-import { getCity, getDistrist } from '../../../ApiService/provincesApi';
+import { AddCustomerApi, EditCustomerApi } from '../../../ApiService/apiCustomer';
 import { normalizePhone } from '../../Function/Function';
+import { Form as FromRsuite, FormGroup, ControlLabel } from 'rsuite';
+
+import TextCustomField from '../../FinalFormComponent/TextCustomField';
+import DateInputField from '../../FinalFormComponent/DateInputField';
+import InputPickerCustomField from '../../FinalFormComponent/InputPickerCustomField';
+import RadioCustomField from '../../FinalFormComponent/RadioCustomField';
+import UploadAvataFrom from './UploadForm/UploadAvataFrom';
 
 const AddCustomer = (props) => {
-    const [prodvice, setProvince] = useState([]);
-    const [distrist, setDistrist] = useState([]);
+    const { customer, prodvice, onGetdata, edit } = props;
+    console.log(props)
     const [open, setOpen] = useState(false);
-    const [city, setCity] = useState();
-    const [initDistrist, setInitDistrist] = useState();
+    const [dis, setDis] = useState([]);
+    const [idEdit, setIdEdit] = useState('');
+    const [cusEdit, setCusEdit] = useState();
 
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const [idRef, setIdRef] = useState('');
 
-    //get CODE CITY
-    let codeCity;
-    if (city) {
-        var res = getIdCity(prodvice, city);
-        codeCity = parseInt(res.code);
-    } else {
-        codeCity = 1;
-    }
-
-    useEffect(() => {
-        const fetchApi = async () => {
-            try {
-                const resCityService = await getCity();
-                setProvince(resCityService);
-                if (codeCity) {
-                    const resDisService = await getDistrist(codeCity);
-                    setDistrist(resDisService.districts);
-                }
-            } catch (error) {
-                console.log(error);
+    const handleOpen = () => {
+        setOpen(true);
+        setCusEdit('');
+        setIdEdit('');
+    };
+    const handleClose = async () => {
+        setOpen(false);
+        if (idEdit) {
+            await openNotifi('info', 'edit');
+        }
+        setIdEdit('');
+    };
+    const saveData = useRef();
+    function openNotifi(funcName, status) {
+        if (status !== 'edit') {
+            if (funcName === 'success') {
+                Notification[funcName]({
+                    title: 'Tạo mới thành công !',
+                    duration: 2000,
+                });
+            } else {
+                Notification[funcName]({
+                    title: 'Tạo mới thất bại!',
+                    duration: 2000,
+                });
             }
-        };
-        fetchApi();
-    }, [codeCity]);
-    function openNotifi(funcName) {
-        if (funcName === 'success') {
-            Notification[funcName]({
-                title: 'Tạo mới thành công !',
-                duration: 2000
-            });
         } else {
-            Notification[funcName]({
-                title: 'Tạo mới thất bại!',
-                duration: 2000
-            });
+            if (funcName === 'warning') {
+                Notification[funcName]({
+                    title: 'Khách hàng đã tồn tại !',
+                    description: (
+                        <span>
+                            Đã tự động chuyển sang CHẾ ĐỘ SỬA,<br></br> Nếu bạn muốn tiếp tục nhập Khách hàng mới, vui
+                            lòng chọn NHẬP LẠI và điền lại thông tin !
+                        </span>
+                    ),
+                    duration: 8000,
+                });
+            } else if (funcName === 'success') {
+                Notification[funcName]({
+                    title: 'Sửa khách hàng thành công !',
+                    duration: 2000,
+                });
+            } else if (funcName === 'info') {
+                Notification[funcName]({
+                    title: 'Đã tắt chế độ sửa !',
+                    duration: 2000,
+                });
+            }
         }
     }
 
     // add item and rendering component parrent with callback
     const onSubmit = async (values) => {
+
         if (!values.city) {
             values.city = prodvice[0].name;
         }
-        if (!values.distrist) {
-            values.distrist = distrist[0].name;
+        if (!values.districst) {
+            values.districst = dis[0].name;
         }
         if (values.mobile) {
             values.mobile = values.mobile.replace(/\s/g, '');
         }
+
+
+        //hanlde format
+        if (!cusEdit) {
+            let formattedToday = '1995-10-01';
+            if (values.dob) {
+                const yyyy = values.dob.getFullYear();
+                let mm = values.dob.getMonth() + 1; // Months start at 0!
+                let dd = values.dob.getDate();
+                if (dd < 10) dd = '0' + dd;
+                if (mm < 10) mm = '0' + mm;
+                formattedToday = yyyy + '-' + mm + '-' + dd;
+            }
+            let newValue = {
+                ...values,
+                city: values.city,
+                distrist: values.districst,
+                idproduct: 'Iphone X',
+                mobile: values.mobile,
+                dob: formattedToday,
+                avata: `idavata${idRef}`,
+            };
+            await AddCustomerApi(newValue, openNotifi('success'));
+            await onGetdata(newValue);
+            setOpen(false);
+        } else {
+        
         let newValue = {
-            ...values,
+            ...cusEdit,
             city: values.city,
-            distrist: values.distrist,
+            distrist: values.districst,
             idproduct: 'Iphone X',
             mobile: values.mobile,
+            dob: values.dob,
+            full_name: values.full_name,
+            gen: values.gen,
+            email: values.email,
         };
-
-        await AddCustomerApi(newValue, openNotifi('success'));
-        await props.onGetdata(newValue);
+        await EditCustomerApi(newValue, idEdit, openNotifi('success', 'edit'));
+        await edit(newValue, idEdit);
         setOpen(false);
     };
-
+    }
     const data = prodvice.map((item) => ({ label: item.name, value: item.name }));
-    const dataDis = distrist.map((item) => ({ label: item.name, value: item.name }));
+    const gen = [
+        { label: 'nam', value: 'nam' },
+        { label: 'nữ', value: 'nữ' },
+    ];
+    const dataMobile = customer.map((item) => {
+        return item.mobile;
+    });
 
+    function findCustomer(id) {
+        const dataCustomer = customer.find((item) => item.mobile === id);
+        return dataCustomer;
+    }
+    function handleCity(city) {
+        const dataDis = prodvice.find((item) => item.name === city);
+        const data = dataDis.districts.map((item) => ({ label: item.name, value: item.name }));
+        setDis(data);
+    }
+    function getIdRef(id) {
+        setIdRef(id);
+    }
+    //validate
+    const required = (value) => (value ? undefined : 'Vui lòng nhập tên khách hàng');
+    const validateMobile = (mobile) => {
+        let regex = /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
+        if (!mobile) {
+            return 'Vui lòng nhập Số điện thoại  !';
+        } else if (!regex.test(mobile.replace(/\s/g, ''))) {
+            return 'Bạn đã nhập sai định dạng Số điện thoại, Vui lòng kiểm tra lại ! ';
+        }
+    };
+    const validateEmail = (email) => {
+        let re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email) {
+            return 'Vui lòng nhập email !!';
+        } else if (!re.test(email)) {
+            return 'Bạn đã nhập sai định dạng Email, Vui lòng kiểm tra lại ! ';
+        }
+    };
     return (
         <>
             <Button color="green" appearance="primary" onClick={() => handleOpen()}>
@@ -91,135 +178,167 @@ const AddCustomer = (props) => {
                     <Modal.Title>Thêm mới khách hàng</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Placeholder.Graph height="300px" classPrefix="popup--addcustomer">
-                        <Form
-                            validate={(values) => {
-                                //validate email + mobile using regex
-                                let regex = /^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7,8}$/;
-                                let re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-                                const errors = {};
-                                if (!values.full_name) {
-                                    errors.full_name = 'Vui lòng nhập tên khách hàng !';
-                                }
-                                if (!values.mobile) {
-                                    errors.mobile = 'Vui lòng nhập SDT !';
-                                } else if (!regex.test(values.mobile.replace(/\s/g, ''))) {
-                                    errors.mobile = 'Bạn đã nhập sai định dạng Số điện thoại, Vui lòng kiểm tra lại ! ';
-                                }
-
-                                if (values.email && !re.test(values.email)) {
-                                    errors.email = 'Bạn đã nhập sai định dạng Email, Vui lòng kiểm tra lại ! ';
-                                }
-                                return errors;
-                            }}
+                    <Placeholder.Graph height="350px" classPrefix="popup--addcustomer">
+                        <FinalForm
                             onSubmit={onSubmit}
+                            initialValues={{}}
                             render={({ handleSubmit, form, submitting, pristine, values }) => (
-                                <form onSubmit={handleSubmit} className="from--addcustomer">
+                                <FromRsuite onSubmit={handleSubmit} ref={saveData} className="from--addcustomer">
+                                    {' '}
                                     <div className="grid--addcustomer--wrapper">
-                                        <div className="grid--addcustomer--item">
-                                            <Field name="full_name">
-                                                {({ input, meta }) => (
-                                                    <div className="wrapper--filed">
-                                                        <input
-                                                            className="addcustomer--input--name"
-                                                            {...input}
-                                                            type="text"
-                                                            placeholder="Họ và tên *"
-                                                        />
-                                                        {meta.error && meta.touched && (
-                                                            <span className="warning">{meta.error}</span>
-                                                        )}
-                                                    </div>
-                                                )}
-                                            </Field>
-                                        </div>
-
-                                        <div className="grid--addcustomer--item">
-                                            <Field name="mobile" parse={normalizePhone}>
-                                                {({ input, meta }) => (
-                                                    <div className="wrapper--filed">
-                                                        <input
-                                                            className="addcustomer--input--name"
-                                                            {...input}
-                                                            type="text"
-                                                            placeholder="0xx.xxx.xxxx"
-                                                        />
-                                                        {meta.error && meta.touched && (
-                                                            <span className="warning">{meta.error}</span>
-                                                        )}
-                                                    </div>
-                                                )}
-                                            </Field>
-                                            <span className="addcustomer--name--after">SDT *</span>
-                                        </div>
-                                        <div className="grid--addcustomer--item">
-                                            <Field name="distrist" initialValue={initDistrist}>
-                                                {() => (
-                                                    <div className="wrapper--filed">
-                                                        <InputPicker
-                                                            className="addcustomer--input--name"
-                                                            data={dataDis}
-                                                            onChange={setInitDistrist}
-                                                            placeholder="Quận/Huyện"
-                                                        />
-                                                    </div>
-                                                )}
-                                            </Field>
-                                        </div>
-                                        <div className="grid--addcustomer--item">
-                                            <Field name="city" initialValue={city}>
-                                                {() => (
-                                                    <div className="wrapper--filed">
-                                                        <InputPicker
-                                                            className="addcustomer--input--name"
-                                                            data={data}
-                                                            onChange={setCity}
-                                                            placeholder="Chọn Thành Phố"
-                                                        />
-                                                    </div>
-                                                )}
-                                            </Field>
-                                        </div>
-                                        <div className="grid--addcustomer--item">
+                                        <FormGroup classPrefix="grid--addcustomer--item">
                                             <Field
+                                                name="full_name"
+                                                component={TextCustomField}
                                                 className="addcustomer--input--name"
-                                                name="dob"
-                                                component="input"
-                                                type="date"
-                                            />
-                                            <span className="addcustomer--name--after">Ngày sinh</span>
+                                                validate={required}
+                                            ></Field>
+                                            <ControlLabel classPrefix="addcustomer--name--after ">
+                                                Tên khách hàng *
+                                            </ControlLabel>
+                                        </FormGroup>
+                                        <FormGroup classPrefix="grid--addcustomer--item">
+                                            <Field
+                                                name="mobile"
+                                                component={TextCustomField}
+                                                className="addcustomer--input--name"
+                                                validate={validateMobile}
+                                                parse={normalizePhone}
+                                                placeholder="___ ___ ____"
+                                                onBlur={(e) => {
+                                                    let value = e.target.value;
+                                                    if (value) {
+                                                        value = value.replace(/\s/g, '');
+                                                    }
+                                                    if (dataMobile.find((item) => item === value)) {
+                                                        setDis(findCustomer(value).districts);
+                                                        setIdEdit(findCustomer(value).id);
+                                                        setCusEdit(findCustomer(value));
+                                                  
+                                                        if (dis) {
+                                                            form.change('full_name', findCustomer(value).full_name);
+                                                            form.change('email', findCustomer(value).email);
+                                                            form.change('dob', findCustomer(value).dob);
+                                                            form.change('city', findCustomer(value).city);
+                                                            form.change('districst', findCustomer(value).distrist);
+                                                            openNotifi('warning', 'edit');
+                                                        }
+                                                    }
+                                                }}
+                                    
+                                            ></Field>
+
+                                            <ControlLabel classPrefix="addcustomer--name--after ">
+                                                Số Điện Thoại *
+                                            </ControlLabel>
+                                        </FormGroup>
+                                        <FormGroup classPrefix="grid--addcustomer--address">
+                                            <Field
+                                                name="districst"
+                                                component={InputPickerCustomField}
+                                                inputvalue={dis}
+                                                placeholder="..."
+                                            ></Field>
+
+                                            <ControlLabel classPrefix="addcustomer--name--after ">
+                                                Quận/huyện
+                                            </ControlLabel>
+                                        </FormGroup>
+                                        <FormGroup classPrefix="grid--addcustomer--address">
+                                            <Field
+                                                placeholder="..."
+                                                name="city"
+                                                component={InputPickerCustomField}
+                                                inputvalue={data}
+                                                onSelect={(value) => {
+                                                    handleCity(value);
+                                                }}
+                                            ></Field>
+
+                                            <ControlLabel classPrefix="addcustomer--name--after ">
+                                                Tỉnh/ Thành phố
+                                            </ControlLabel>
+                                        </FormGroup>
+
+                                        <div className="grid--addcustomer--groupdate">
+                                            <FormGroup>
+                                                <Field name="dob" component={DateInputField}></Field>
+
+                                                <ControlLabel classPrefix="addcustomer--name--after ">
+                                                    Ngày sinh
+                                                </ControlLabel>
+                                            </FormGroup>
+                                            <FormGroup>
+                                                <Field
+                                                    name="gen"
+                                                    component={RadioCustomField}
+                                                    inputvalue={gen}
+                                                    
+                                                    className="gen"
+                                                    initialValue={'nữ'}
+                                                ></Field>
+                                            </FormGroup>
+                                   
+                                                <FormGroup>
+                                                    <Field
+                                                        IdcusEdit={cusEdit.avata}
+                                                        getId={getIdRef}
+                                                        name="avata"
+                                                        component={UploadAvataFrom}
+                                                        {...props}
+                                                    ></Field>
+
+                                                    <ControlLabel className="gen--input--avata">Avata</ControlLabel>
+                                                </FormGroup>
                                         </div>
-                                        <div className="grid--addcustomer--item">
-                                            <Field name="email">
-                                                {({ input, meta }) => (
-                                                    <div className="wrapper--filed">
-                                                        <input
-                                                            className="addcustomer--input--name"
-                                                            {...input}
-                                                            type="text"
-                                                            placeholder="email@example.vn"
-                                                        />
-                                                        {meta.error && meta.touched && (
-                                                            <span className="warning">{meta.error}</span>
-                                                        )}
-                                                    </div>
-                                                )}
-                                            </Field>
-                                            <span className="addcustomer--name--after">Email</span>
-                                        </div>
-                                        <div className="buttons addcustomer--button--submit">
+                                        <FormGroup classPrefix="grid--addcustomer--item">
+                                            <Field
+                                                name="email"
+                                                component={TextCustomField}
+                                                className="addcustomer--input--name"
+                                                validate={validateEmail}
+                                                placeholder="___@gmail.com"
+                                            ></Field>
+
+                                            <ControlLabel classPrefix="addcustomer--name--after">
+                                                Email liên hệ *
+                                            </ControlLabel>
+                                        </FormGroup>
+
+                                        <ButtonToolbar className="buttons addcustomer--button--submit">
+                                            {!idEdit ? (
+                                                <Button
+                                                    appearance="primary"
+                                                    type="submit"
+                                                    disabled={submitting || pristine}
+                                                    color="green"
+                                                >
+                                                    Tạo mới
+                                                </Button>
+                                            ) : (
+                                                <Button
+                                                    appearance="primary"
+                                                    type="submit"
+                                                    disabled={submitting || pristine}
+                                                    color="violet"
+                                                >
+                                                    Cập nhật
+                                                </Button>
+                                            )}
+
                                             <Button
-                                                appearance="primary"
-                                                type="submit"
-                                                disabled={submitting || pristine}
-                                                color="green"
+                                                onClick={() => {
+                                                    form.reset();
+                                                    setIdEdit('');
+                                                    setCusEdit('')
+                                                }}
+                                                color="blue"
                                             >
-                                                Tạo mới
+                                                Nhập lại
                                             </Button>
-                                        </div>
+                                        </ButtonToolbar>
                                     </div>
-                                </form>
+                                </FromRsuite>
                             )}
                         />
                     </Placeholder.Graph>
@@ -234,9 +353,4 @@ const AddCustomer = (props) => {
     );
 };
 
-const getIdCity = (a, x) => {
-    if (x) return a.find((item) => item.name === x || item.code === x);
-    else return { code: 1 };
-};
-export { getIdCity };
 export default AddCustomer;

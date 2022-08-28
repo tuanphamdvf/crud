@@ -1,6 +1,6 @@
 import classnames from "classnames/bind"
 import PropTypes from "prop-types"
-import { ControlLabel, FormControl, FormGroup } from "rsuite"
+import { ControlLabel, Form, FormControl, FormGroup } from "rsuite"
 import styles from "./CustomField.module.scss"
 
 const cx = classnames.bind(styles)
@@ -27,6 +27,7 @@ export default function CustomField(props) {
     labelStyle,
     defaultstyle,
     errorPlacement,
+    parse,
     ...rest
   } = props
 
@@ -38,18 +39,20 @@ export default function CustomField(props) {
         </ControlLabel>
       )}
 
-      <FormControl
-        {...input}
-        {...rest}
-        className={className}
-        accepter={accepter}
-        errorMessage={meta.touched && meta.error ? meta.error : null}
-        errorPlacement={errorPlacement || "bottomStart"}
-        // Để cho label và input đổ dọc xuống
-        classPrefix={
-          defaultstyle ? "rs-form-control" : "rs-form-control-wrapper custom-form-control"
-        }
-      />
+      <Form>
+        <FormControl
+          {...input}
+          {...rest}
+          className={className}
+          accepter={accepter}
+          errorMessage={meta.touched && meta.error ? meta.error : null}
+          errorPlacement={errorPlacement || "bottomStart"}
+          // Để cho label và input đổ dọc xuống
+          classPrefix={
+            defaultstyle ? "rs-form-control" : "rs-form-control-wrapper custom-form-control"
+          }
+        />
+      </Form>
     </FormGroup>
   )
 }

@@ -89,18 +89,34 @@ $default-margin-bottom-moblie: 16px;
 .green--status {
     color: $green800;
     background-color: $green100;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 400px;
+    line-height: 22px;
+    text-align: center;
 }
 .red--status {
     color: $red800;
     background-color: $red100;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 400px;
+    line-height: 22px;
+    text-align: center;
 }
 .blue--status {
     color: $blue800;
     background-color: $blue100;
+   
 }
 .gray--status {
     color: $gray800;
     background-color: $gray100;
+}
+.flexCenter{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 a {
     text-decoration: none;
@@ -109,7 +125,7 @@ a {
     }
 }
 .active {
-    color: $blue600 !important;
+    color: $blue500 !important;
 }
 .frontBold{
     font-size: 14px;
@@ -117,13 +133,45 @@ a {
     line-height: 21px;
     color: $gray900;
 }
+.frontF{
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 21px;
+    color: $gray600;
+}
 .frontS{
     font-weight: 400;
     line-height: 21px;
-    color: $gray500;
+    color: $gray600;
     font-size: 14px;
 }
-
+.frontXs{
+    font-weight: 400;
+    line-height: 18px;
+    color: $gray500;
+    font-size: 12px;
+}
+.flexBetween {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.red{
+    color: $red500;
+}
+.green{
+    color: $green500;
+}
+.blue{
+    color: $blue500;
+}
+.displayNone{
+    display: none !important;
+    position:absolute !important;
+}
+.left{
+    text-align: left;
+}
 //responsive the web
 @media only screen and (max-width: 576px) {
     .main {

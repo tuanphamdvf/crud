@@ -21,7 +21,6 @@ function CustomDateInputComponent(props) {
   return (
     <Calendar
       {...props}
-      locale="vi"
       placeholderText="Nhập/Chọn ngày"
       selected={input.value ? new Date(input.value) : null}
       onChange={input.onChange}

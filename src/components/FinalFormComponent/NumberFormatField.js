@@ -64,7 +64,7 @@ export default function NumberFormatField(props) {
         />
       </div>
       {meta.error && meta.touched && (
-        <span className="form-text text-center w-100 text-danger">{meta.error}</span>
+        <span className="form-text text-center w-100 text-danger ">{meta.error}</span>
       )}
     </div>
   )

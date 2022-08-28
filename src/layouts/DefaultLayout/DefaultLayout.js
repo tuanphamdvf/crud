@@ -1,16 +1,25 @@
 import Header from '../components/Header/Header';
 import Sidebar from '../components/Sidebar/Sidebar';
+import { useState } from 'react';
+import Login from '../../pages/Login/Login';
 
 function DefaultLayout({ children }) {
-    return (
-        <>
-            <Header />
-            <div className="container">
+    const [user, setUser] = useState();
+   const getUser = (token)=>{
+                  setUser(token)
+   }
+   const token =  localStorage.getItem("token");
+    if (user ||token) {
+        return (
+            <>
+                <Header />
+                <div className="container">
                     <Sidebar />
                     <div className="main--page"> {children} </div>
-            </div>
-        </>
-    );
+                </div>
+            </>
+        );
+    } else return <Login getUser ={getUser}></Login>;
 }
 
 export default DefaultLayout;

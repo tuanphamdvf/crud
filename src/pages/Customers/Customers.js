@@ -1,17 +1,21 @@
 import { useEffect, useState, useRef } from 'react';
-
 import { FlexboxGrid, Pagination } from 'rsuite';
+
 import { getCustomer } from '../../ApiService/apiCustomer';
+import { getAllAdress } from '../../ApiService/provincesApi';
+
+
 import AddCustomer from '../../components/Customer/AddCustomer/AddCustomer';
 import FilterCustomer from '../../components/Customer/FilterCustomer/FilterCustomer';
 import CustomerTable from '../../components/Customer/CustomerTable/CustomerTable';
 import { handleString } from '../../components/Function/Function';
-import { getAllAdress } from '../../ApiService/provincesApi';
 
 function Customers() {
     const [wordEntered, setWordEntered] = useState('');
     const [prodvice, setProvince] = useState([]);
     const [activePage, setActivePage] = useState(1);
+
+  
     // array current
     const dataCus = useRef();
     const [customer, setCustomer] = useState([]);
@@ -33,9 +37,33 @@ function Customers() {
         setCustomer(newArr);
     }
     //----filter----
-    
+    function filterCustomer(data) {
+        if (data.full_name || data.product || data.email || data.mobile) {
+            //loc tren array current
+            const newArr = dataCus.current.filter((item) => {
+        if(!item.idproduct) item.idproduct = '.'
+        if(!item.email) item.email = '.'
+                return (
+                    (!data.full_name ||  handleString(item.full_name).toLowerCase().includes(handleString(data.full_name).toLowerCase())) &&
+                    (!data.mobile ||   item.mobile.toLowerCase().includes(data.mobile.replace(/\s/g, '').toLowerCase())) &&
+                    (!data.product || item.idproduct.toLowerCase().includes(data.product.toLowerCase())) &&
+                    (!data.email || item.email.toLowerCase().includes(data.email.toLowerCase()))
+                );
+            });
+            setCustomer(newArr);
+        } else {
+            setCustomer(dataCus.current);
+        }
+    }
+   
+
     //-----ADD------
     function getdata(data) {
+//-------------------- handle async await when add customer------------------
+    // const itemLast =  customer.length - 1
+    // let id =  customer[itemLast].id +1
+    // if(!data.id) data ={...data,id:id}
+ 
         if (data) return setCustomer([...customer, data]);
     }
 
@@ -55,6 +83,23 @@ function Customers() {
     }, []);
     //-----Search----
 
+    const handleFilter = (event) => {
+        const searchWord = event.target.value;
+        setWordEntered(searchWord);
+        const newFilter = customer.filter((item) => {
+            return (
+                handleString(item.full_name).toLowerCase().includes(handleString(searchWord).toLowerCase()) ||
+                item.mobile.toLowerCase().includes(searchWord.replace(/\s/g, '').toLowerCase()) ||
+                item.email.toLowerCase().includes(searchWord.toLowerCase())
+            );
+        });
+
+        if (searchWord === '') {
+            setCustomer(dataCus.current);
+        } else {
+            setCustomer(newFilter);
+        }
+    };
     //
     const clearInput = () => {
         setCustomer([]);
@@ -81,7 +126,7 @@ function Customers() {
                                 <input
                                     className="customer--search--input"
                                     placeholder="Tìm kiếm... "
-                        
+                                    onChange={handleFilter}
                                     value={wordEntered}
                                 />
                                 <div>
@@ -90,9 +135,9 @@ function Customers() {
                                 </div>
                             </div>
                             <div className="wrapper--action--left">
-                                <AddCustomer onGetdata={getdata}></AddCustomer>
+                                <AddCustomer prodvice={prodvice} customer ={customer} onGetdata={getdata} edit = {editCustomer}></AddCustomer>
                                 <div className="table--customer--filter">
-                                    <FilterCustomer ></FilterCustomer>
+                                    <FilterCustomer filter={filterCustomer}></FilterCustomer>
                                 </div>
                             </div>
                         </div>
@@ -107,13 +152,13 @@ function Customers() {
                                 <FlexboxGrid.Item className="item--customer" colspan={3}>
                                     NGÀY SINH{' '}
                                 </FlexboxGrid.Item>
-                                <FlexboxGrid.Item className="item--customer" colspan={6}>
+                                <FlexboxGrid.Item className="item--customer" colspan={5}>
                                     ĐỊA CHỈ
                                 </FlexboxGrid.Item>
                                 <FlexboxGrid.Item className="item--customer" colspan={5}>
                                     EMAIL
                                 </FlexboxGrid.Item>
-                                <FlexboxGrid.Item className="item--customer customer--action" colspan={3}>
+                                <FlexboxGrid.Item className="item--customer customer--action" colspan={4}>
                                     CHỨC NĂNG
                                 </FlexboxGrid.Item>
                             </FlexboxGrid>
