@@ -10,7 +10,7 @@ When choosing products, automatically fill the total (quantity, if available) an
 
 Automatic order code generation.
 
-Anables users to create new orders and new customers if they are unable to choose existing customers from the search bar.
+Enables users to create new orders and new customers if they are unable to choose existing customers from the search bar.
 
 Logical management: the whole payment amount, the debit, Change payments and customer payments.
 
@@ -24,23 +24,28 @@ Report filtration by date (total order amount, total debt)
 
 Show order information
 
-automatically pick the most recent 7 days
+Automatically pick the most recent 7 days
 
 
 "Mô tả "
 " 
 Tự động điền các trường thông tin khi chọn khách  hàng.
+
 Tự động điền các các trường tổng  tiền(nếu có sẵn số lượng ) và trường giá sản phẩm khi chọn sản phẩm.
+
 Tự  động tạo mã đơn hàng.
+
 Cho phép tạo mới khách hàng ,nếu khách không chọn được khách hàng ở thanh tìm kiếm.
+
 Xử lý logic: Tính tổng bill, Ghi nợ,  Tiền thừa, tiền khách đưa. 
+
 Cho phép giảm giá (hiện tại bằng tiền, sẽ phát triển thêm %); giảm giá thông qua tổng hoá đơn. 
-Xử lý push,pop, remove sản phẩm. 
+
 Validate các trường thông tin.
-Xoá đơn hàng.
-Lọc đơn hàng.
-Edit đơn hàng .
-Search .
+
+Xoá đơn hàng, Lọc đơn hàng, sửa đơn hàng,Search 
+Validate các trường thông tin.
+.
 Lọc báo cáo theo ngày( tổng tiền đơn hàng, tổng nợ, tổng số đơn).
 Show chi tiết đơn hàng.
 Tự động chọn 7 ngày gần nhất của danh sách đơn hàng.
