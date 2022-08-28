@@ -1,51 +1,59 @@
-import { Modal, Button, Placeholder } from 'rsuite';
-import { useState, useEffect } from 'react';
+import { Modal, Button, Placeholder, InputPicker,Notification } from 'rsuite';
+import { useState } from 'react';
 import { Form, Field } from 'react-final-form';
+import PropTypes from 'prop-types'
 
 import { EditCustomerApi } from '../../../ApiService/apiCustomer';
-import { getCity, getDistrist } from '../../../ApiService/provincesApi';
-import { getIdCity } from '../AddCustomer/AddCustomer';
+import { normalizePhone } from '../../Function/Function';
 
 const EditCustomer = (props) => {
-    const { item: i, editCustomer: edit } = props;
-    const [prodvice, setProvince] = useState([]);
-    const [distrist, setDistrist] = useState([]);
-    const [city, setCity] = useState(i.city);
-    const [initDistrist, setInitDistrist] = useState(i.distrist);
+    const { item: i, editCustomer: edit, prodvice: pro } = props;
     const [open, setOpen] = useState(false);
-
-    const handleOpen = () => setOpen(true);
+    const [dis, setDis] = useState([]);
+    const handleOpen = () => {
+        setDis(i.districts);
+        setOpen(true);
+    };
     const handleClose = () => setOpen(false);
-
     const onSubmit = async (values) => {
-        await EditCustomerApi(values, i.id);
-        await edit(values, i.id);
-        setOpen(false);
+        if (!values.city) {
+            values.city = 'Thành phố Hà Nội';
+            values.distrist = '';
+        }
+        if (!values.distrist) values.distrist = '';
+        if (values.mobile) {
+            values.mobile = values.mobile.replace(/\s/g, '');
+        }
+        if(i.id){
+            await EditCustomerApi({ ...values, mobile: values.mobile }, i.id,editStatus('success'),);
+            await edit({ ...values, mobile: values.mobile }, i.id);
+            setOpen(false);
+        }else{
+            editStatus("warning")
+            window.location.reload()
+        }
+        
     };
 
-    let codeCity = 1;
-    if (city) {
-        var res = getIdCity(prodvice, city);
-        if (res) codeCity = parseInt(res.code);
+    function handleCity(city) {
+        const dataDis = pro.find((item) => item.name === city);
+        const data = dataDis.districts.map((item) => ({ label: item.name, value: item.name }));
+        setDis(data);
     }
-
-    useEffect(() => {
-        const fetchApi = async () => {
-            try {
-                const resCityService = await getCity();
-                setProvince(resCityService);
-                if (codeCity) {
-                    const resDisService = await getDistrist(codeCity);
-                    setDistrist(resDisService.districts);
-                    setInitDistrist(resDisService.districts[0].name);
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fetchApi();
-    }, [codeCity]);
-
+    const data = pro.map((item) => ({ label: item.name, value: item.name }));
+    function editStatus(funcName) {
+        if (funcName === 'success') {
+            Notification[funcName]({
+                title: 'Sửa khách hàng thành công !',
+                duration: 2000
+            });
+        } else {
+            Notification[funcName]({
+                title: 'Vui lòng thử lại !!',
+                duration: 4000
+            });
+        }
+    }
     return (
         <>
             <i className="fa-solid fa-pen-to-square editcustomer--buton" onClick={() => handleOpen()}></i>
@@ -54,7 +62,7 @@ const EditCustomer = (props) => {
                     <Modal.Title>Cập nhật khách hàng "{i.full_name} "</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Placeholder.Graph height="300px" classPrefix="popup--addcustomer">
+                    <Placeholder.Graph height="300px" classPrefix="popup--addcustomer"> 
                         <Form
                             validate={(values) => {
                                 //validate email + mobile using regex
@@ -67,7 +75,7 @@ const EditCustomer = (props) => {
                                 }
                                 if (!values.mobile) {
                                     errors.mobile = 'Vui lòng nhập SDT !';
-                                } else if (!regex.test(values.mobile)) {
+                                } else if (!regex.test(values.mobile.replace(/\s/g, ''))) {
                                     errors.mobile = 'Bạn đã nhập sai định dạng SDT, Vui lòng kiểm tra lại ! ';
                                 }
 
@@ -80,12 +88,12 @@ const EditCustomer = (props) => {
                             initialValues={{
                                 full_name: i.full_name,
                                 mobile: i.mobile,
-                                distrist: initDistrist,
-                                city: city,
                                 dob: i.dob,
                                 email: i.email,
+                                city: i.city,
+                                distrist: i.distrist,
                             }}
-                            render={({ handleSubmit, form, submitting, pristine }) => (
+                            render={({ handleSubmit, form, submitting, pristine, values }) => (
                                 <form onSubmit={handleSubmit} className="from--addcustomer">
                                     <div className="grid--addcustomer--wrapper">
                                         <div className="grid--addcustomer--item">
@@ -106,7 +114,7 @@ const EditCustomer = (props) => {
                                             </Field>
                                         </div>
                                         <div className="grid--addcustomer--item">
-                                            <Field name="mobile">
+                                            <Field name="mobile" parse={normalizePhone}>
                                                 {({ input, meta }) => (
                                                     <div className="wrapper--filed">
                                                         <input
@@ -124,45 +132,36 @@ const EditCustomer = (props) => {
                                             <span className="addcustomer--name--after">SDT</span>
                                         </div>
                                         <div className="grid--addcustomer--item">
-                                            <Field
-                                                className="addcustomer--input--name"
-                                                name="distrist"
-                                                component="select"
-                                                type="text"
-                                                placeholder="Quận/Huyện"
-                                                onChange={(e) => {
-                                                    setInitDistrist(e.target.value);
-                                                }}
-                                            >
-                                                {distrist &&
-                                                    distrist.map((item) => {
-                                                        return (
-                                                            <option name={item.code} key={item.code}>
-                                                                {item.name}
-                                                            </option>
-                                                        );
-                                                    })}
+                                            <Field name="distrist">
+                                                {() => (
+                                                    <div className="wrapper--filed">
+                                                        <InputPicker
+                                                            defaultValue={i.distrist}
+                                                            data={dis}
+                                                            className="addcustomer--input--name"
+                                                            onChange={(e) => {
+                                                                values.distrist = e;
+                                                            }}
+                                                        />
+                                                    </div>
+                                                )}
                                             </Field>
                                         </div>
                                         <div className="grid--addcustomer--item">
-                                            <Field
-                                                className="addcustomer--input--name"
-                                                name="city"
-                                                component="select"
-                                                type="text"
-                                                placeholder="Thành phố"
-                                                onChange={(e) => {
-                                                    setCity(e.target.value);
-                                                }}
-                                            >
-                                                {prodvice &&
-                                                    prodvice.map((item) => {
-                                                        return (
-                                                            <option name={item.code} key={item.code}>
-                                                                {item.name}
-                                                            </option>
-                                                        );
-                                                    })}
+                                            <Field name="city">
+                                                {() => (
+                                                    <div className="wrapper--filed">
+                                                        <InputPicker
+                                                            className="addcustomer--input--name"
+                                                            data={data}
+                                                            defaultValue={i.city}
+                                                            onChange={(value) => {
+                                                                values.city = value;
+                                                                handleCity(value);
+                                                            }}
+                                                        />
+                                                    </div>
+                                                )}
                                             </Field>
                                         </div>
                                         <div className="grid--addcustomer--item">
@@ -217,5 +216,9 @@ const EditCustomer = (props) => {
         </>
     );
 };
-
+EditCustomer.protoType = {
+    i: PropTypes.object.isRequired,
+    edit: PropTypes.func.isRequired,
+    pro: PropTypes.array.isRequired
+}
 export default EditCustomer;

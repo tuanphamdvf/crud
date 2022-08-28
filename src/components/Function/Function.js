@@ -1,8 +1,6 @@
-
-
 //---- Handle string---Search  engine----
 function handleString(str) {
-    if(str){
+    if (str) {
         str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
         str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, 'e');
         str = str.replace(/ì|í|ị|ỉ|ĩ/g, 'i');
@@ -27,7 +25,22 @@ function handleString(str) {
         str = str.charAt(0).toUpperCase() + str.slice(1);
         return str;
     }
-    return str
-    
+    return str;
 }
-export {handleString}
+//Format phone Custom
+const normalizePhone = value => {
+  if (!value) return value;
+  const onlyNums = value.replace(/[^\d]/g, "");
+  if (onlyNums.length <= 3) return onlyNums;
+  if (onlyNums.length <= 6)
+    return `${onlyNums.slice(0, 3)} ${onlyNums.slice(3, 6)}`;
+  return `${onlyNums.slice(0, 3)} ${onlyNums.slice(3, 6)} ${onlyNums.slice(
+    6,
+    10
+  )}`;
+};
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+export { handleString, normalizePhone,numberWithCommas };
+ 
