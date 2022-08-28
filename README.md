@@ -32,10 +32,10 @@ automatically pick the most recent 7 days
 Tự động điền các trường thông tin khi chọn khách  hàng.
 Tự động điền các các trường tổng  tiền(nếu có sẵn số lượng ) và trường giá sản phẩm khi chọn sản phẩm.
 Tự  động tạo mã đơn hàng.
-Cho phép tạo mới khách hàng , tạo đơn nếu khách không chọn được khách hàng ở thanh tìm kiếm.
+Cho phép tạo mới khách hàng ,nếu khách không chọn được khách hàng ở thanh tìm kiếm.
 Xử lý logic: Tính tổng bill, Ghi nợ,  Tiền thừa, tiền khách đưa. 
 Cho phép giảm giá (hiện tại bằng tiền, sẽ phát triển thêm %); giảm giá thông qua tổng hoá đơn. 
-Xử lý push, remove sản phẩm. 
+Xử lý push,pop, remove sản phẩm. 
 Validate các trường thông tin.
 Xoá đơn hàng.
 Lọc đơn hàng.
