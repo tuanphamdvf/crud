@@ -28,19 +28,9 @@ function handleString(str) {
     return str;
 }
 //Format phone Custom
-const normalizePhone = value => {
-  if (!value) return value;
-  const onlyNums = value.replace(/[^\d]/g, "");
-  if (onlyNums.length <= 3) return onlyNums;
-  if (onlyNums.length <= 6)
-    return `${onlyNums.slice(0, 3)} ${onlyNums.slice(3, 6)}`;
-  return `${onlyNums.slice(0, 3)} ${onlyNums.slice(3, 6)} ${onlyNums.slice(
-    6,
-    10
-  )}`;
-};
+
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
-export { handleString, normalizePhone,numberWithCommas };
+export { handleString,numberWithCommas };
  

@@ -198,8 +198,7 @@ const AddCustomer = (props) => {
                                                 name="mobile"
                                                 component={TextCustomField}
                                                 className="addcustomer--input--name"
-                                                validate={validateMobile}
-                                                parse={normalizePhone}
+                          
                                                 placeholder="___ ___ ____"
                                                 onBlur={(e) => {
                                                     let value = e.target.value;
